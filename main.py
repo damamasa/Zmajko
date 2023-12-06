@@ -27,20 +27,25 @@ def igra():
     zmaj_w = screen.get_width() / 12
     zmaj_x = screen.get_width() - (screen.get_width()/2) - (zmaj_w/2)
     zmaj_y = screen.get_height() - (screen.get_height()/6) - (zmaj_h /2)
+    život = 3
+    isHit = False
 
     #protivnik varijable
     ProtivnikX = []
     ProtivnikY = []
     protivnik_w = zmaj_w/2.5
     protivnik_h = zmaj_h/2.5
-    brojProtivnika = 200
+    protivnikPomakY = screen.get_width() / 100
+    brojProtivnikaNaEkranu = 50
+    brojačProtivnika = 0
+    brojProtivnika = 100
 
     #nova slika zmaja
     zmaj_slika = pygame.transform.scale(zmaj_slika_og, (zmaj_w, zmaj_h))
     protivnik_slika = pygame.transform.scale(protivnik_og, (protivnik_w, protivnik_h))
 
     def stvoriProtivnike():
-        for i in range(brojProtivnika):
+        for i in range(brojProtivnikaNaEkranu):
             noviX = random.randint(0, screen.get_width()-protivnik_w) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
             if i == 0: #za prvog protivnika uzima se bilo koji x
                 ProtivnikX.append(noviX)
@@ -75,8 +80,6 @@ def igra():
         zmajPomakX = 0
         zmajPomakY = 0
 
-        protivnikPomakY = screen.get_width() / 100
-
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
             zmajPomakX = -1*(screen.get_width() / 80)
@@ -103,13 +106,33 @@ def igra():
         
         stvoriProtivnike() #stvaranje neprijatelja
 
-        for i in range(brojProtivnika): #micanje i crtanje protivnika
-            ProtivnikY[i] += protivnikPomakY
-            protivnik(ProtivnikX[i],ProtivnikY[i], i)
-
-            if pygame.Rect(ProtivnikX[i], ProtivnikY[i], protivnik_w, protivnik_h).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)): #collision protivnika
-                zmaj_x = 0
-                zmaj_y = 0
+        for i in range(brojProtivnikaNaEkranu): 
+            ProtivnikY[i] += protivnikPomakY #micanje protivnika
+            protivnik(ProtivnikX[i],ProtivnikY[i], i) #crtanje protivnika
+            
+            if ProtivnikY[i] > screen.get_height(): #respawnanje protivnika
+                brojačProtivnika +=1
+                if brojačProtivnika < brojProtivnika: #ograničenje da se ne respawnaju zauvijek
+                    ProtivnikY[i] = ProtivnikY[i-1] -protivnik_h*2 #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
+                    noviX = random.randint(0, screen.get_width()-protivnik_w)
+                    while abs(ProtivnikX[i-1]-noviX) < protivnik_w*2:
+                        noviX = random.randint(0, screen.get_width()-protivnik_w)
+                    else:
+                        ProtivnikX[i] = noviX
+                
+            if pygame.Rect(ProtivnikX[i], ProtivnikY[i], protivnik_w, protivnik_h).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)) and isHit == False: #collision protivnika
+                život -= 1
+                isHit = True
+                timer1 = vrijeme
+        if isHit == True: #ako pogođen
+            if vrijeme - timer1 > 1:
+                isHit = False
+                protivnikPomakY = screen.get_width() / 100 #vraća brzinu neprijatelja
+                zmaj_slika.set_alpha(256) #vraća transparency
+            else:
+                protivnikPomakY = screen.get_width() / 200 #usporava neprijatelje
+                zmaj_slika.set_alpha(120) #stvara sliku transparentnu
+                draw_text(f"{round(vrijeme - timer1,2)}s",text_font,(0,0,0),screen.get_width()/2,screen.get_height()/2)
 
         #crtanje zmaja
         igrac(zmaj_x,zmaj_y)
@@ -118,6 +141,7 @@ def igra():
         t2 = time.perf_counter()
         vrijeme =round(vrijeme + ((t2-t1)*10),2)
         draw_text(f"{vrijeme}s",text_font,(0,0,0),0,0)
+        draw_text(f"{život} života",text_font,(0,0,0),0,100)
 
         pygame.display.update()
 igra()
