@@ -7,8 +7,10 @@ pygame.init()
 screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 pygame.display.set_caption("Zmajevi")
 
-a = pygame.Surface((screen.get_width(),screen.get_height()))
-a.fill("blue")
+#slike
+zmaj_slika_og = pygame.image.load("slike/zmaj.png")
+pozadina = pygame.transform.scale(pygame.image.load("slike/pozadina.jpg"), (screen.get_width(), screen.get_height()))
+protivnik_og = pygame.image.load("slike/birds.png")
 
 def igra():
     run = True
@@ -20,10 +22,14 @@ def igra():
     zmaj_x = screen.get_width() - (screen.get_width()/2) - (zmaj_w/2)
     zmaj_y = screen.get_height() - (screen.get_height()/6) - (zmaj_h /2)
 
+    #nova slika zmaja
+    zmaj_slika = pygame.transform.scale(zmaj_slika_og, (zmaj_w, zmaj_h))
+    protivnik_slika = pygame.transform.scale(protivnik_og, (zmaj_w/2, zmaj_h/2))
+
     #protivnik varijable
     listaProtivnikaX = []
     listaProtivnikaY = []
-    brojProtivnika = 100 #za sad
+    brojProtivnika = 200 #za sad
 
     for i in range(brojProtivnika):
         protivnikX = random.randint(0, screen.get_width()-zmaj_w/2)
@@ -40,10 +46,10 @@ def igra():
             listaProtivnikaY.append(listaProtivnikaY[i-1]-zmaj_h)
 
     def igrac(x,y):
-        pygame.draw.rect(screen, "red", pygame.Rect(zmaj_x, zmaj_y, zmaj_w, zmaj_h))
+        screen.blit(zmaj_slika, (x, y))
     
     def protivnik(x,y, i):
-        pygame.draw.rect(screen, "green", pygame.Rect(listaProtivnikaX[i], listaProtivnikaY[i], zmaj_w/2, zmaj_h/2))
+        screen.blit(protivnik_slika, (x, y))
     
 
     while run:
@@ -52,7 +58,7 @@ def igra():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        screen.blit(a,(0,0))
+        screen.blit(pozadina, (0,0))
 
         #vrijeme
         t1 = time.perf_counter()
