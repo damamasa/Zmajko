@@ -51,27 +51,108 @@ def draw_text(text,font,text_col,x,y):
         screen.blit(img,(x,y))
 
 
-pygame.init()
+def main():
+    global screen, text_font, text_font2, run
+    pygame.init()
 
-os.environ["SDL_VIDEO_CENTERED"]="1"
-info=pygame.display.Info()
-screen_width, screen_height=info.current_w,info.current_h
-screen = pygame.display.set_mode((screen_width-(0.005*screen_width),screen_height-(0.06*screen_height)), pygame.RESIZABLE)
-pygame.display.set_caption("Zmajevi")
+    #font i tekst
+    text_font = pygame.font.SysFont("Arial",50)
+    text_font2 = pygame.font.SysFont("Arial",80)
+    screen = None
 
-#font i tekst
-text_font = pygame.font.SysFont("Arial",50)
-def draw_text(text,font,text_col,x,y):
-    img = font.render(text,True,text_col)
-    screen.blit(img,(x,y))
+    os.environ["SDL_VIDEO_CENTERED"]="1"
+    info=pygame.display.Info()
+    screen_width, screen_height=info.current_w,info.current_h
+    screen = pygame.display.set_mode((screen_width-int(0.005*screen_width),screen_height-int(0.06*screen_height)), pygame.FULLSCREEN)
+    pygame.display.set_caption("Zmajevi")
 
-#slike
-zmaj_slika_og = pygame.image.load("slike/zmaj.png")
-pozadina = pygame.transform.scale(pygame.image.load("slike/pozadina.jpg"), (screen.get_width(), screen.get_height()))
-protivnik_og = pygame.image.load("slike/birds.png")
+    run = False
+    while not run:
+        run = main_menu()
+    igra()
+
+def main_menu():
+    global screen, text_font, text_font2, run
+    while True:
+        zmajko_pozadina = pygame.transform.scale(pygame.image.load("slike/zmajko_leti.jpg"), (screen.get_width(), screen.get_height()))
+        screen.blit(zmajko_pozadina, (0,0) )
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        MENU_TEXT = text_font2.render("ZMAJKO", True, "#b68f40")
+        MENU_RECT = MENU_TEXT.get_rect(center=(screen.get_width()/2,screen.get_height()/10))
+
+        IGRAJ_GUMB = Button("Igraj", 70, "White", (220, 120), "Grey", "White", (screen.get_width()/2, screen.get_height()/3))
+        OPTIONS_BUTTON = Button("Opcije", 70, "White", (220, 120), "Grey", "White", (screen.get_width()/2, screen.get_height()/2))
+        QUIT_BUTTON = Button("Izađi", 70, "White", (220, 120), "Grey", "Red", (screen.get_width()/2, screen.get_height()/1.5))
+
+        screen.blit(MENU_TEXT, MENU_RECT)
+
+        for gumb in [IGRAJ_GUMB, QUIT_BUTTON, OPTIONS_BUTTON]:
+            if gumb.checkForCollision(MENU_MOUSE_POS):
+                gumb.changeButtonColor()
+            gumb.update(screen)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if IGRAJ_GUMB.checkForCollision(MENU_MOUSE_POS):
+                    run = True
+                    igra()
+                if QUIT_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+def pause_menu():
+    global screen, text_font, run
+    paused = True
+    pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
+    pozadina.fill("Black")
+    pozadina.set_alpha(100)
+    screen.blit(pozadina, (0,0))
+    while paused:
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        MENU_TEXT = text_font.render("PAUZA", True, "#b68f40")
+        MENU_RECT = MENU_TEXT.get_rect(center=(screen.get_width()/2, screen.get_height()/5))
+
+        PLAY_BUTTON = Button("Igraj", 70, "White", (220, 120), "Grey", "White", (screen.get_width()/2, screen.get_height()/2))
+        QUIT_BUTTON = Button("Izađi", 70, "White", (220, 120), "Grey", "Red", (screen.get_width()/2, screen.get_height()/1.5))
+
+        screen.blit(MENU_TEXT, MENU_RECT)
+
+        for gumb in [PLAY_BUTTON, QUIT_BUTTON]:
+            if gumb.checkForCollision(MENU_MOUSE_POS):
+                gumb.changeButtonColor()
+            gumb.update(screen)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    paused = False
+                if QUIT_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = False
+                if event.key == pygame.K_ESCAPE:
+                    paused = False
+
+        pygame.display.update()
 
 def igra():
-    run = True
+    global screen, text_font, run
+    #slike
+    zmaj_slika_og = pygame.image.load("slike/zmaj.png")
+    pozadina = pygame.transform.scale(pygame.image.load("slike/pozadina.jpg"), (screen.get_width(), screen.get_height()))
+    protivnik_og = pygame.image.load("slike/birds.png")
 
     #vrijeme
     vrijeme = 0
@@ -100,6 +181,10 @@ def igra():
     #nova slika zmaja
     zmaj_slika = pygame.transform.scale(zmaj_slika_og, (zmaj_w, zmaj_h))
     protivnik_slika = pygame.transform.scale(protivnik_og, (protivnik_w, protivnik_h))
+
+    def draw_text(text,font,text_col,x,y):
+        img = font.render(text,True,text_col)
+        screen.blit(img,(x,y))
 
     def stvoriProtivnike():
         for i in range(brojProtivnikaNaEkranu):
@@ -136,8 +221,20 @@ def igra():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    pause_menu()
+                if event.key == pygame.K_ESCAPE:
+                    pause_menu()
+                if event.key == pygame.K_SPACE:
+                    if ispaljeno == False:
+                        pucanj_y = zmaj_y #u trenutku pucanja stavlja pucanj kod zmaja
+                        pucanj_x = zmaj_x+(zmaj_w/2)
+                        pucanje(zmaj_x+(zmaj_w/2), zmaj_y) #crta pucanj
+                        ispaljeno = True 
         screen.blit(pozadina, (0,0))
 
+        #pomak zmaja
         zmajPomakX = 0
         zmajPomakY = 0
 
@@ -158,18 +255,14 @@ def igra():
             zmajPomakY = -1*(screen.get_height() / 60)
         if keys[pygame.K_s]:
             zmajPomakY = screen.get_height() / 60
-        if keys[pygame.K_SPACE]:
-            if ispaljeno == False:
-                pucanje(zmaj_x+(zmaj_w/2), zmaj_y)
-                ispaljeno = True
 
         #pomak pucnja
         if ispaljeno == True:
             pucanj_y += pucanjPomak
             pucanje(pucanj_x, pucanj_y)
-        else:
-            pucanj_y = zmaj_y
-            pucanj_x = zmaj_x+(zmaj_w/2)
+        else: #kada ne puca, stavlja pucanj off screen
+            pucanj_y = screen.get_height() + pucanj_h*2
+            pucanj_x = -pucanj_w*2
 
         #ograničenje pucnja
         if pucanj_y < 0:
@@ -207,16 +300,17 @@ def igra():
             
             if pygame.Rect(ProtivnikX[i], ProtivnikY[i], protivnik_w, protivnik_h).colliderect(pygame.Rect(pucanj_x, pucanj_y, pucanj_w, pucanj_h)):
                 ispaljeno = False
-                brojačProtivnika +=1
                 vratiProtivnika(i)
                 
 
         if isHit == True: #ako pogođen
             if vrijeme - timer1 > 1:
+                ispaljeno = False
                 isHit = False
                 protivnikPomakY = screen.get_width() / 100 #vraća brzinu neprijatelja
                 zmaj_slika.set_alpha(256) #vraća transparency
             else:
+                ispaljeno = True
                 protivnikPomakY = screen.get_width() / 200 #usporava neprijatelje
                 zmaj_slika.set_alpha(120) #stvara sliku transparentnu
                 draw_text(f"{round(vrijeme - timer1,2)}s",text_font,(0,0,0),screen.get_width()/2,screen.get_height()/2)
@@ -231,4 +325,6 @@ def igra():
         draw_text(f"{život} života",text_font,(0,0,0),0,100)
 
         pygame.display.update()
-igra()
+
+if __name__ == "__main__":
+    main()
