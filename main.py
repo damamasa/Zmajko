@@ -3,6 +3,54 @@ import random
 import time
 import os
 
+class Button_Slika():
+	def __init__(self, x, y, image, scale):
+		width = image.get_width()
+		height = image.get_height()
+		self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
+		self.rect = self.image.get_rect()
+		self.rect.topleft = (x, y)
+		self.clicked = False
+
+	def draw(self, surface):
+		action = False
+		pos = pygame.mouse.get_pos()
+
+		if self.rect.collidepoint(pos):
+			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+				self.clicked = True
+				action = True
+
+		if pygame.mouse.get_pressed()[0] == 0:
+			self.clicked = False
+		surface.blit(self.image, (self.rect.x, self.rect.y))
+		return action
+
+class Button:
+    def __init__(self, text_input, text_size, text_color, rectangle_width_and_height, rectangle_color, rectangle_hovering_color, position):
+        self.text_input = text_input
+        #rectangle ispod teksta
+        self.rectangle = pygame.Rect((position[0]-(rectangle_width_and_height[0]/2), position[1]-(rectangle_width_and_height[1]/2)), rectangle_width_and_height)
+        self.rectangle_color, self.rectangle_hovering_color = rectangle_color, rectangle_hovering_color
+        #tekst u gumbu
+        self.font = pygame.font.Font(None, text_size)
+        self.text_surface = self.font.render(text_input, False, text_color)
+        self.text_rectangle = self.text_surface.get_rect(center = self.rectangle.center)
+    def update(self, screen):
+        pygame.draw.rect(screen, self.rectangle_color, self.rectangle)
+        screen.blit(self.text_surface, self.text_rectangle)
+    def checkForCollision(self, mouse_position):
+        if mouse_position[0] in range(self.rectangle.left, self.rectangle.right) and mouse_position[1] in range(self.rectangle.top, self.rectangle.bottom):
+            return True
+        return False
+    def changeButtonColor(self):
+        self.rectangle_color = self.rectangle_hovering_color
+
+def draw_text(text,font,text_col,x,y):
+        img = font.render(text,True,text_col)
+        screen.blit(img,(x,y))
+
+
 pygame.init()
 
 os.environ["SDL_VIDEO_CENTERED"]="1"
