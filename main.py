@@ -2,6 +2,7 @@ import pygame
 import random
 import time
 import os
+import sys
 
 class Button_Slika():
 	def __init__(self, x, y, image, scale):
@@ -25,10 +26,9 @@ class Button_Slika():
 			self.clicked = False
 		surface.blit(self.image, (self.rect.x, self.rect.y))
 		return action
-
+		
 class Button:
     def __init__(self, text_input, text_size, text_color, rectangle_width_and_height, rectangle_color, rectangle_hovering_color, position):
-        self.text_input = text_input
         #rectangle ispod teksta
         self.rectangle = pygame.Rect((position[0]-(rectangle_width_and_height[0]/2), position[1]-(rectangle_width_and_height[1]/2)), rectangle_width_and_height)
         self.rectangle_color, self.rectangle_hovering_color = rectangle_color, rectangle_hovering_color
@@ -49,8 +49,7 @@ class Button:
 def draw_text(text,font,text_col,x,y):
         img = font.render(text,True,text_col)
         screen.blit(img,(x,y))
-
-
+	
 def main():
     global screen, text_font, text_font2, run
     pygame.init()
@@ -148,21 +147,26 @@ def pause_menu():
         pygame.display.update()
 
 def igra():
-    global screen, text_font, run
+    global screen, text_font, run, brojačProtivnika
     #slike
     zmaj_slika_og = pygame.image.load("slike/zmaj.png")
     pozadina = pygame.transform.scale(pygame.image.load("slike/pozadina.jpg"), (screen.get_width(), screen.get_height()))
     protivnik_og = pygame.image.load("slike/birds.png")
+    sidebar = pygame.transform.scale(pygame.image.load("slike/sidebar_pun.png"), (screen.get_width()*0.1651, screen.get_height()))
+    srce = pygame.transform.scale(pygame.image.load("slike/srce.png"), (screen.get_width()*0.05, screen.get_height()*0.08))
+    fireball_og = pygame.image.load("slike/fireball.png")
+    fireball_menu = pygame.transform.scale(fireball_og, (screen.get_width()*0.05, screen.get_height()*0.09))
 
     #vrijeme
     vrijeme = 0
     t1 = time.perf_counter()
+
     #igrac varijable
     zmaj_h = screen.get_height() / 7
     zmaj_w = screen.get_width() / 12
     zmaj_x = screen.get_width() - (screen.get_width()/2) - (zmaj_w/2)
     zmaj_y = screen.get_height() - (screen.get_height()/6) - (zmaj_h /2)
-    život = 3
+    život = 2
     isHit = False
 
     #protivnik varijable
@@ -177,6 +181,7 @@ def igra():
 
     #pucanj
     ispaljeno = False
+    timer3 = -5
 
     #nova slika zmaja
     zmaj_slika = pygame.transform.scale(zmaj_slika_og, (zmaj_w, zmaj_h))
@@ -188,12 +193,12 @@ def igra():
 
     def stvoriProtivnike():
         for i in range(brojProtivnikaNaEkranu):
-            noviX = random.randint(0, int(screen.get_width()-protivnik_w)) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
+            noviX = random.randint(0, int(screen.get_width()*0.834895-protivnik_w)) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
             if i == 0: #za prvog protivnika uzima se bilo koji x
                 ProtivnikX.append(noviX)
             else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
-                while abs(ProtivnikX[i-1]-noviX) < protivnik_w*2:
-                    noviX = random.randint(0, int(screen.get_width()-protivnik_w))
+                while abs(ProtivnikX[i-1]-noviX) < protivnik_w:
+                    noviX = random.randint(0, int(screen.get_width()*0.834895-protivnik_w))
                 else:
                     ProtivnikX.append(noviX)
             if i == 0: #uzima se određeni y na kome će se stvoriti 1. neprijatelj
@@ -202,10 +207,12 @@ def igra():
                 ProtivnikY.append(ProtivnikY[i-1]-protivnik_h*2)
 
     def vratiProtivnika(i):
+        global brojačProtivnika
+        brojačProtivnika +=1
         ProtivnikY[i] = 0 -protivnik_h #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
-        noviX = random.randint(0, int(screen.get_width()-protivnik_w))
+        noviX = random.randint(0, int(screen.get_width()*0.834895-protivnik_w))
         while abs(ProtivnikX[i-1]-noviX) < protivnik_w*2:
-            noviX = random.randint(0, int(screen.get_width()-protivnik_w))
+            noviX = random.randint(0, int(screen.get_width()*0.834895-protivnik_w))
         else:
             ProtivnikX[i] = noviX
 
@@ -227,12 +234,14 @@ def igra():
                 if event.key == pygame.K_ESCAPE:
                     pause_menu()
                 if event.key == pygame.K_SPACE:
-                    if ispaljeno == False:
+                    if ispaljeno == False and (vrijeme -timer3) > 5:
+                        timer3 = vrijeme
                         pucanj_y = zmaj_y #u trenutku pucanja stavlja pucanj kod zmaja
                         pucanj_x = zmaj_x+(zmaj_w/2)
                         pucanje(zmaj_x+(zmaj_w/2), zmaj_y) #crta pucanj
                         ispaljeno = True 
         screen.blit(pozadina, (0,0))
+        screen.blit(sidebar,(screen.get_width()*0.834895, 0))
 
         #pomak zmaja
         zmajPomakX = 0
@@ -244,7 +253,8 @@ def igra():
         pucanjPomak = -protivnikPomakY
 
         def pucanje(x,y):
-            pygame.draw.rect(screen, "yellow", pygame.Rect(x, y, pucanj_w, pucanj_h))
+            fireball = pygame.transform.scale(fireball_og,(pucanj_w,pucanj_h))
+            screen.blit(fireball, (x,y))
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -275,8 +285,8 @@ def igra():
         #ograničenja
         if zmaj_x < 0:
             zmaj_x = 0
-        if zmaj_x + zmaj_w> screen.get_width():
-            zmaj_x = screen.get_width() - zmaj_w
+        if zmaj_x + zmaj_w> screen.get_width()*0.834895:
+            zmaj_x = screen.get_width()*0.834895 - zmaj_w
         if zmaj_y < 0:
             zmaj_y = 0
         if zmaj_y + zmaj_h> screen.get_height():
@@ -289,8 +299,7 @@ def igra():
             protivnik(ProtivnikX[i],ProtivnikY[i], i) #crtanje protivnika
             
             if ProtivnikY[i] > screen.get_height(): #respawnanje protivnika
-                brojačProtivnika +=1
-                if brojačProtivnika < brojProtivnika: #ograničenje da se ne respawnaju zauvijek
+                if brojačProtivnika+brojProtivnikaNaEkranu < brojProtivnika: #ograničenje da se ne respawnaju zauvijek
                     vratiProtivnika(i)
                 
             if pygame.Rect(ProtivnikX[i], ProtivnikY[i], protivnik_w, protivnik_h).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)) and isHit == False: #collision protivnika
@@ -320,11 +329,27 @@ def igra():
 
         #vrijeme
         t2 = time.perf_counter()
-        vrijeme =round(t2-t1,2)
-        draw_text(f"{vrijeme}s",text_font,(0,0,0),0,0)
-        draw_text(f"{život} života",text_font,(0,0,0),0,100)
+        vrijeme =round(t2-t1,1)
 
+        #pisanje teksta u sidebar
+        draw_text(f"{vrijeme}s",text_font,(0,0,0),screen.get_width()*0.915,screen.get_height()*0.12)
+        draw_text(f"Level 1",text_font,(0,0,0),screen.get_width()*0.84375,screen.get_height()*0.86)
+        for i in range(život+1):
+            x = screen.get_width()*0.05
+            screen.blit(srce,(screen.get_width()*0.84375+x*i,screen.get_height()*0.7574))
+        progress = (brojačProtivnika/(brojProtivnika-brojProtivnikaNaEkranu))
+        pygame.draw.rect(screen, "green", pygame.Rect(screen.get_width()*0.846, screen.get_height()*0.928, screen.get_width()*0.14323*progress, screen.get_height()*0.041))
+        if vrijeme - timer3 < 5:
+            draw_text(f"{round((vrijeme - timer3),1)}s",text_font,(0,0,0),screen.get_width()*0.915,screen.get_height()*0.62)
+            fireball_menu.set_alpha(150)
+            screen.blit(fireball_menu,(screen.get_width()*0.855,screen.get_height()*0.6))
+        else:
+            fireball_menu.set_alpha(256)
+            screen.blit(fireball_menu,(screen.get_width()*0.855,screen.get_height()*0.6))
         pygame.display.update()
+
+        if život < 0: #pokrece game_over funkciju ako ostaneš bez života
+            game_over()
 
 if __name__ == "__main__":
     main()
