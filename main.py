@@ -54,8 +54,7 @@ class Button:
 def draw_text(text,font,text_col,x,y):
         img = font.render(text,True,text_col)
         screen.blit(img,(x,y))
-
-
+    
 def main():
     global screen, text_font, text_font2, run
     pygame.init()
@@ -73,13 +72,55 @@ def main():
 
     run = False
     while not run:
-        run = main_menu()
+        run = player_name()
+
+def player_name():
+    global screen
+    font = pygame.font.Font(None, 60)
+    igrač1ime = ""
+    boja = (255, 255, 255)
+    text_box1 = pygame.Rect(screen.get_width()*0.45, screen.get_height()*0.5, screen.get_width()*0.1, screen.get_height()*0.05)
+    active = False
+    run2 = True
+
+    while run2:
+        screen.fill((0, 0, 0)) 
+        pygame.draw.rect(screen, boja, text_box1, 4)
+        surf1 = font.render(igrač1ime, True, (255, 255, 255))
+        screen.blit(surf1, (text_box1.x + 5, text_box1.y + 5))
+        text_box1.w = max(100, surf1.get_width() + 10)
+        draw_text(f"Unesi ime:",font,boja,screen.get_width()/2.35,screen.get_height()/2.5)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run2 = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if text_box1.collidepoint(event.pos):
+                    active = True
+                else:
+                    active = False
+            if event.type == pygame.KEYDOWN:
+                if active:
+                    if event.key == pygame.K_BACKSPACE:
+                        igrač1ime = igrač1ime[:-1]
+                    else:
+                        igrač1ime += event.unicode
+                if event.key == pygame.K_RETURN and len(igrač1ime) > 1:
+                    with open("igraci", "a") as datoteka:
+                        datoteka.write(igrač1ime + "\n")
+                    run2 = False
+                    main_menu()
+                
+        pygame.display.update()
+
+    pygame.quit()
+    sys.exit()
 
 def main_menu():
     global screen, text_font, text_font2, run
     while True:
-        zmajko_pozadina = pygame.transform.scale(pygame.image.load("slike/pozadina_main2.jpg"), (screen.get_width(), screen.get_height()))
-        zmajko_logo = pygame.transform.scale(pygame.image.load("slike/zmajko_logo.png"), (screen.get_width()/3, screen.get_height()/5))
+        zmajko_pozadina = pygame.transform.scale(pygame.image.load("pozadina_main2.jpg"), (screen.get_width(), screen.get_height()))
+        zmajko_logo = pygame.transform.scale(pygame.image.load("zmajko_logo.png"), (screen.get_width()/3, screen.get_height()/5))
         screen.blit(zmajko_pozadina, (0,0))
         screen.blit(zmajko_logo, (screen.get_width()/3,screen.get_height()/20))
         MENU_MOUSE_POS = pygame.mouse.get_pos()
@@ -100,7 +141,7 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if IGRAJ_GUMB.checkForCollision(MENU_MOUSE_POS):
                     run = True
-                    level_menu()
+                    odabir_skinova()
                 if QUIT_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
@@ -117,7 +158,7 @@ def pause_menu():
     while paused:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        pauzirano_logo = pygame.transform.scale(pygame.image.load("slike/pauzirano_logo.png"), (screen.get_width()/3, screen.get_height()/5))
+        pauzirano_logo = pygame.transform.scale(pygame.image.load("pauzirano_logo.png"), (screen.get_width()/3, screen.get_height()/5))
 
         PLAY_BUTTON = Button("Nastavi", 70, "White", (220, 120), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
         QUIT_BUTTON = Button("Izađi", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.5))
@@ -157,7 +198,7 @@ def game_over():
     while paused:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        kraj_logo = pygame.transform.scale(pygame.image.load("slike/kraj_logo.png"), (screen.get_width()/3, screen.get_height()/5))
+        kraj_logo = pygame.transform.scale(pygame.image.load("kraj_logo.png"), (screen.get_width()/3, screen.get_height()/5))
 
         PLAY_BUTTON = Button("Igraj ponovno", 70, "White", (360, 120), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
         MAIN_BUTTON = Button("Glavni izbornik", 70, "White", (360, 120), "Light Grey", "dimgray", (screen.get_width()/2, screen.get_height()/1.5))
@@ -194,10 +235,41 @@ def game_over():
 level_state = "Level 1-1"
 world_state = "1"
 
+def odabir_skinova():
+    global screen,zmaj1,zmaj2
+    zmaj1 = ""
+    zmaj2 = ""
+    font = pygame.font.Font(None, 60)
+    zmaj_slika_og = pygame.image.load("zmaj.png")
+    zmaj_slika_og2 = pygame.image.load("zmaj2.jpg")
+    btn1 = Button_Slika(100,500,zmaj_slika_og,0.5)
+    btn2 = Button_Slika(600,500,zmaj_slika_og2,0.8)
+    run3 = True
+
+    while run3:
+        screen.fill((0, 0, 0)) 
+        draw_text(f"Odaberi skin za Zmajka:",font,(255,255,255),screen.get_width()/2.35,screen.get_height()/3)
+
+        if btn1.draw(screen):
+            zmaj1 = "da"
+            run3 = False
+            level_menu()
+        if btn2.draw(screen):
+            zmaj2 = "da"
+            run3 = False
+            level_menu()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run3 = False
+        pygame.display.update()
+
+    pygame.quit()
+    sys.exit()
+
 def promijeni_level():
     global boja, level_state, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojAviona, brojMeteora, brojVjetra, vanzemaljac_state, brojVanzemaljca, world_state, pozadina
     if level_state == "Level 1-1": #leveli igrice
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world1_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world1_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20 
         brzinaStvaranja = 2.5
         final_vrijeme = 20
@@ -207,7 +279,7 @@ def promijeni_level():
         vanzemaljac_state = False
         world_state = "1"
     if level_state == "Level 1-2":
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world1_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world1_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 1.5
         final_vrijeme = 20
@@ -217,7 +289,7 @@ def promijeni_level():
         vanzemaljac_state = False
         world_state = "1"
     if level_state == "Level 2-1":     
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world2_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world2_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 2
         final_vrijeme = 20
@@ -228,7 +300,7 @@ def promijeni_level():
         brojAviona = 3
         world_state = "2"
     if level_state == "Level 2-2":
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world2_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world2_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 1.5
         final_vrijeme = 20
@@ -239,7 +311,7 @@ def promijeni_level():
         brojAviona = 5
         world_state = "2"
     if level_state == "Level 3-1":
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world3_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world3_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 10
         brzinaStvaranja = 2.5
         final_vrijeme = 20
@@ -251,7 +323,7 @@ def promijeni_level():
         brojMeteora = 3
         world_state = "3"
     if level_state == "Level 3-2":
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world3_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world3_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 15
         brzinaStvaranja = 2.5
         final_vrijeme = 20
@@ -263,7 +335,7 @@ def promijeni_level():
         brojMeteora = 5
         world_state = "3"
     if level_state == "Level 4-1":
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world4_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world4_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 10
         brzinaStvaranja = 2
         final_vrijeme = 20
@@ -276,7 +348,7 @@ def promijeni_level():
         brojVjetra = 1
         world_state = "4"
     if level_state == "Level 4-2":
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world4_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world4_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 10
         brzinaStvaranja = 2
         final_vrijeme = 20
@@ -289,7 +361,7 @@ def promijeni_level():
         brojVjetra = 2
         world_state = "4"
     if level_state == "Level 5-1":
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world5_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 1.5
         final_vrijeme = 20
@@ -303,7 +375,7 @@ def promijeni_level():
         brojVanzemaljca = 3
         world_state = "5"
     if level_state == "Level 5-2":
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world5_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 1.5
         final_vrijeme = 20
@@ -343,17 +415,17 @@ def level_menu():
     promijeni_level()
 
     if world_state == "1": #pozicija leveli slike po svijetovima
-        leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd1.jpg"), (screen.get_width(), screen.get_height()))
+        leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd1.jpg"), (screen.get_width(), screen.get_height()))
     elif world_state == "2":
-        leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd2.jpg"), (screen.get_width(), screen.get_height()))
+        leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd2.jpg"), (screen.get_width(), screen.get_height()))
     elif world_state == "3":
-        leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd3.jpg"), (screen.get_width(), screen.get_height()))
+        leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd3.jpg"), (screen.get_width(), screen.get_height()))
     elif world_state == "4":
-        leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd4.jpg"), (screen.get_width(), screen.get_height()))
+        leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd4.jpg"), (screen.get_width(), screen.get_height()))
     elif world_state == "5":
-        leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd5.jpg"), (screen.get_width(), screen.get_height()))
+        leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd5.jpg"), (screen.get_width(), screen.get_height()))
 
-    arrow = pygame.image.load("slike/arrow.png")
+    arrow = pygame.image.load("purple.png")
     while True:
         screen.blit(leveli_pozadina, (0,0))
         
@@ -385,29 +457,32 @@ def level_menu():
         pygame.display.update()
 
 def igra():
-    global screen, text_font, run, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, world_state, pozadina
+    global screen, text_font, run, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, world_state, pozadina,zmaj1,zmaj2
     #slike
-    zmaj_slika_og = pygame.image.load("slike/zmaj.png")
-    protivnik_og = pygame.image.load("slike/birds.png")
-    sidebar = pygame.transform.scale(pygame.image.load("slike/sidebar.png"), (screen.get_width()*0.1651, screen.get_height()))
-    sidebar1 = pygame.transform.scale(pygame.image.load("slike/sidebar1.png"), (screen.get_width()*0.1651, screen.get_height()))
-    sidebar2 = pygame.transform.scale(pygame.image.load("slike/sidebar2.png"), (screen.get_width()*0.1651, screen.get_height()))
-    sidebar3 = pygame.transform.scale(pygame.image.load("slike/sidebar3.png"), (screen.get_width()*0.1651, screen.get_height()))
-    sidebar4 = pygame.transform.scale(pygame.image.load("slike/sidebar4.png"), (screen.get_width()*0.1651, screen.get_height()))
+    if zmaj1 == "da":
+        zmaj_slika_og = pygame.image.load("zmaj.png")
+    elif zmaj2 =="da":
+        zmaj_slika_og = pygame.image.load("zmaj2.jpg")
+    protivnik_og = pygame.image.load("birds.png")
+    sidebar = pygame.transform.scale(pygame.image.load("sidebar.png"), (screen.get_width()*0.1651, screen.get_height()))
+    sidebar1 = pygame.transform.scale(pygame.image.load("sidebar1.png"), (screen.get_width()*0.1651, screen.get_height()))
+    sidebar2 = pygame.transform.scale(pygame.image.load("sidebar2.png"), (screen.get_width()*0.1651, screen.get_height()))
+    sidebar3 = pygame.transform.scale(pygame.image.load("sidebar3.png"), (screen.get_width()*0.1651, screen.get_height()))
+    sidebar4 = pygame.transform.scale(pygame.image.load("sidebar4.png"), (screen.get_width()*0.1651, screen.get_height()))
     zmaj_menu = pygame.transform.scale(zmaj_slika_og, (screen.get_width()*0.045, screen.get_height()*0.085))
-    srce = pygame.transform.scale(pygame.image.load("slike/srce.png"), (screen.get_width()*0.05, screen.get_height()*0.08))
-    fireball_og = pygame.image.load("slike/fireball.png")
+    srce = pygame.transform.scale(pygame.image.load("srce.png"), (screen.get_width()*0.05, screen.get_height()*0.08))
+    fireball_og = pygame.image.load("fireball.png")
     fireball_menu = pygame.transform.scale(fireball_og, (screen.get_width()*0.055, screen.get_height()*0.095))
-    avion_og = pygame.image.load("slike/avion.png")
-    meteor_og = pygame.image.load("slike/meteor.png")
-    vjetar_og = pygame.transform.flip(pygame.image.load("slike/vjetar.png"), True, False)
-    vanzemaljac_og = pygame.image.load("slike/alien.png")
-    vanzemaljac_pucanj_og = pygame.image.load("slike/purple.png")
-    powerup2_og = pygame.image.load("slike/blue.png")
+    avion_og = pygame.image.load("avion.png")
+    meteor_og = pygame.image.load("meteor.png")
+    vjetar_og = pygame.transform.flip(pygame.image.load("vjetar.png"), True, False)
+    vanzemaljac_og = pygame.image.load("alien.png")
+    vanzemaljac_pucanj_og = pygame.image.load("purple.png")
+    powerup2_og = pygame.image.load("blue.png")
     powerup2_menu = pygame.transform.scale(powerup2_og, (screen.get_width()*0.055, screen.get_height()*0.095))
-    powerup3_og = pygame.image.load("slike/powerup3.png")
+    powerup3_og = pygame.image.load("powerup3.png")
     powerup3_menu = pygame.transform.scale(powerup3_og, (screen.get_width()*0.055, screen.get_height()*0.095))
-    powerup4_menu = pygame.transform.scale(pygame.image.load("slike/3balls.png"), (screen.get_width()*0.065, screen.get_height()*0.1))
+    powerup4_menu = pygame.transform.scale(pygame.image.load("3balls.png"), (screen.get_width()*0.065, screen.get_height()*0.1))
 
     powerups = []
     #aktivacija powerupova određeni po svijetu
