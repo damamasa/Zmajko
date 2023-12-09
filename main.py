@@ -4,8 +4,32 @@ import time
 import os
 import sys
 
+class Button_Slika():
+    def __init__(self, x, y, image, scale):
+        width = image.get_width()
+        height = image.get_height()
+        self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.clicked = False
+
+    def draw(self, surface):    
+        action = False
+        pos = pygame.mouse.get_pos()
+
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                self.clicked = True
+                action = True
+
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
+        surface.blit(self.image, (self.rect.x, self.rect.y))
+        return action
+
 class Button:
     def __init__(self, text_input, text_size, text_color, rectangle_width_and_height, rectangle_color, rectangle_hovering_color, position):
+        self.text_input = text_input
         #rectangle ispod teksta
         self.rectangle = pygame.Rect((position[0]-(rectangle_width_and_height[0]/2), position[1]-(rectangle_width_and_height[1]/2)), rectangle_width_and_height)
         self.rectangle_color, self.rectangle_hovering_color = rectangle_color, rectangle_hovering_color
@@ -22,6 +46,14 @@ class Button:
         return False
     def changeButtonColor(self):
         self.rectangle_color = self.rectangle_hovering_color
+    def changeTextInput(self, new_text):
+        self.text_input = new_text
+        self.text_surface = self.font.render(self.text_input, False, (255, 255, 255))
+        self.text_rectangle = self.text_surface.get_rect(center=self.rectangle.center)
+
+def draw_text(text,font,text_col,x,y):
+        img = font.render(text,True,text_col)
+        screen.blit(img,(x,y))
 
 def main():
     global screen, text_font, text_font2, run
@@ -46,20 +78,18 @@ def main():
 def main_menu():
     global screen, text_font, text_font2, run
     while True:
-        zmajko_pozadina = pygame.transform.scale(pygame.image.load("slike/zmajko_leti.jpg"), (screen.get_width(), screen.get_height()))
-        screen.blit(zmajko_pozadina, (0,0) )
+        zmajko_pozadina = pygame.transform.scale(pygame.image.load("slike/pozadina_main2.jpg"), (screen.get_width(), screen.get_height()))
+        zmajko_logo = pygame.transform.scale(pygame.image.load("slike/zmajko_logo.png"), (screen.get_width()/3, screen.get_height()/5))
+        screen.blit(zmajko_pozadina, (0,0))
+        screen.blit(zmajko_logo, (screen.get_width()/3,screen.get_height()/20))
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = text_font2.render("ZMAJKO", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(screen.get_width()/2,screen.get_height()/10))
+        IGRAJ_GUMB = Button("Igraj", 70, "White", (220, 120), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2.5))
+        LEVEL_GUMB = Button("Leveli", 70, "White", (220, 120), "Light Grey", "Dimgray", (screen.get_width()/2, screen.get_height()/1.75))
+        QUIT_BUTTON = Button("Izađi", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.3))
 
-        IGRAJ_GUMB = Button("Igraj", 70, "White", (220, 120), "Grey", "White", (screen.get_width()/2, screen.get_height()/3))
-        OPTIONS_BUTTON = Button("Opcije", 70, "White", (220, 120), "Grey", "White", (screen.get_width()/2, screen.get_height()/2))
-        QUIT_BUTTON = Button("Izađi", 70, "White", (220, 120), "Grey", "Red", (screen.get_width()/2, screen.get_height()/1.5))
 
-        screen.blit(MENU_TEXT, MENU_RECT)
-
-        for gumb in [IGRAJ_GUMB, QUIT_BUTTON, OPTIONS_BUTTON]:
+        for gumb in [IGRAJ_GUMB, QUIT_BUTTON, LEVEL_GUMB]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
             gumb.update(screen)
@@ -88,13 +118,12 @@ def pause_menu():
     while paused:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = text_font.render("PAUZA", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(screen.get_width()/2, screen.get_height()/5))
+        pauzirano_logo = pygame.transform.scale(pygame.image.load("slike/pauzirano_logo.png"), (screen.get_width()/3, screen.get_height()/5))
 
-        PLAY_BUTTON = Button("Igraj", 70, "White", (220, 120), "Grey", "White", (screen.get_width()/2, screen.get_height()/2))
-        QUIT_BUTTON = Button("Izađi", 70, "White", (220, 120), "Grey", "Red", (screen.get_width()/2, screen.get_height()/1.5))
+        PLAY_BUTTON = Button("Nastavi", 70, "White", (220, 120), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
+        QUIT_BUTTON = Button("Izađi", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.5))
 
-        screen.blit(MENU_TEXT, MENU_RECT)
+        screen.blit(pauzirano_logo, (screen.get_width()/3,screen.get_height()/10))
 
         for gumb in [PLAY_BUTTON, QUIT_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
@@ -129,14 +158,13 @@ def game_over():
     while paused:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = text_font.render("KRAJ IGRE", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(screen.get_width()/2, screen.get_height()/5))
+        kraj_logo = pygame.transform.scale(pygame.image.load("slike/kraj_logo.png"), (screen.get_width()/3, screen.get_height()/5))
 
-        PLAY_BUTTON = Button("Igraj ponovno", 70, "White", (360, 120), "Grey", "White", (screen.get_width()/2, screen.get_height()/3))
-        MAIN_BUTTON = Button("Glavni izbornik", 70, "White", (360, 120), "Grey", "White", (screen.get_width()/2, screen.get_height()/2))
-        QUIT_BUTTON = Button("Izađi", 70, "White", (360, 120), "Grey", "Red", (screen.get_width()/2, screen.get_height()/1.5))
+        PLAY_BUTTON = Button("Igraj ponovno", 70, "White", (360, 120), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
+        MAIN_BUTTON = Button("Glavni izbornik", 70, "White", (360, 120), "Light Grey", "dimgray", (screen.get_width()/2, screen.get_height()/1.5))
+        QUIT_BUTTON = Button("Izađi", 70, "White", (360, 120), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.2))
 
-        screen.blit(MENU_TEXT, MENU_RECT)
+        screen.blit(kraj_logo, (screen.get_width()/3,screen.get_height()/10))
 
         for gumb in [PLAY_BUTTON,MAIN_BUTTON, QUIT_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
@@ -171,8 +199,9 @@ def igra():
     pozadina = pygame.transform.scale(pygame.image.load("slike/pozadina.jpg"), (screen.get_width(), screen.get_height()))
     protivnik_og = pygame.image.load("slike/birds.png")
     sidebar = pygame.transform.scale(pygame.image.load("slike/sidebar_pun.png"), (screen.get_width()*0.1651, screen.get_height()))
-    srce = pygame.transform.scale(pygame.image.load("slike/srce.png"), (screen.get_width()*0.05, screen.get_height()*0.075))
+    srce = pygame.transform.scale(pygame.image.load("slike/srce.png"), (screen.get_width()*0.05, screen.get_height()*0.08))
     fireball_og = pygame.image.load("slike/fireball.png")
+    fireball_menu = pygame.transform.scale(fireball_og, (screen.get_width()*0.05, screen.get_height()*0.09))
 
     #vrijeme
     vrijeme = 0
@@ -198,6 +227,7 @@ def igra():
 
     #pucanj
     ispaljeno = False
+    timer3 = -5
 
     #nova slika zmaja
     zmaj_slika = pygame.transform.scale(zmaj_slika_og, (zmaj_w, zmaj_h))
@@ -250,12 +280,13 @@ def igra():
                 if event.key == pygame.K_ESCAPE:
                     pause_menu()
                 if event.key == pygame.K_SPACE:
-                    if ispaljeno == False:
+                    if ispaljeno == False and (vrijeme -timer3) > 5:
+                        timer3 = vrijeme
                         pucanj_y = zmaj_y #u trenutku pucanja stavlja pucanj kod zmaja
                         pucanj_x = zmaj_x+(zmaj_w/2)
                         pucanje(zmaj_x+(zmaj_w/2), zmaj_y) #crta pucanj
                         ispaljeno = True 
-        screen.blit(pozadina, (0,0))
+        screen.fill("light blue")
         screen.blit(sidebar,(screen.get_width()*0.834895, 0))
 
         #pomak zmaja
@@ -347,13 +378,20 @@ def igra():
         vrijeme =round(t2-t1,1)
 
         #pisanje teksta u sidebar
-        draw_text(f"{vrijeme}s",text_font,(0,0,0),screen.get_width()*0.92,screen.get_height()*0.29)
+        draw_text(f"{vrijeme}s",text_font,(0,0,0),screen.get_width()*0.915,screen.get_height()*0.12)
         draw_text(f"Level 1",text_font,(0,0,0),screen.get_width()*0.84375,screen.get_height()*0.86)
         for i in range(život+1):
             x = screen.get_width()*0.05
             screen.blit(srce,(screen.get_width()*0.84375+x*i,screen.get_height()*0.7574))
         progress = (brojačProtivnika/(brojProtivnika-brojProtivnikaNaEkranu))
-        pygame.draw.rect(screen, "green", pygame.Rect(screen.get_width()*0.846, screen.get_height()*0.928, screen.get_width()*0.14323*progress, screen.get_height()*0.0416))
+        pygame.draw.rect(screen, "green", pygame.Rect(screen.get_width()*0.846, screen.get_height()*0.928, screen.get_width()*0.14323*progress, screen.get_height()*0.041))
+        if vrijeme - timer3 < 5:
+            draw_text(f"{round((vrijeme - timer3),1)}s",text_font,(0,0,0),screen.get_width()*0.915,screen.get_height()*0.62)
+            fireball_menu.set_alpha(150)
+            screen.blit(fireball_menu,(screen.get_width()*0.855,screen.get_height()*0.6))
+        else:
+            fireball_menu.set_alpha(256)
+            screen.blit(fireball_menu,(screen.get_width()*0.855,screen.get_height()*0.6))
         pygame.display.update()
 
         if život < 0: #pokrece game_over funkciju ako ostaneš bez života
