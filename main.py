@@ -751,7 +751,7 @@ def igra():
     sidebar3 = pygame.transform.scale(pygame.image.load("sidebar3.png"), (screen.get_width()*0.1651, screen.get_height()))
     sidebar4 = pygame.transform.scale(pygame.image.load("sidebar4.png"), (screen.get_width()*0.1651, screen.get_height()))
     zmaj_menu = pygame.transform.scale(zmaj_slika_og, (screen.get_width()*0.045, screen.get_height()*0.085))
-    srce = pygame.transform.scale(pygame.image.load("srce.png"), (screen.get_width()*0.05, screen.get_height()*0.08))
+    srce = pygame.transform.scale(pygame.image.load("srce.png"), (screen.get_width()*0.045, screen.get_height()*0.07))
     fireball_og = pygame.image.load("fireball.png")
     fireball_menu = pygame.transform.scale(fireball_og, (screen.get_width()*0.055, screen.get_height()*0.095))
     avion_og = pygame.image.load("avion.png")
