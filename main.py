@@ -315,9 +315,10 @@ def main_menu():
     global screen, text_font, text_font2, skinovi, skin_brojac, igraci, impossible_state, odabrani_level, replay_state, bozic_state
     zmajko_pozadina = pygame.transform.scale(pygame.image.load("pozadina_mainmenu.png"), (screen.get_width(), screen.get_height()))
     skin1 = pygame.transform.scale(pygame.image.load("zmaj.png"), (screen.get_width()*0.2265, screen.get_height()*0.365))
-    skin2 = pygame.transform.scale(pygame.image.load("zmaj2.jpg"), (screen.get_width()*0.2265, screen.get_height()*0.365))
+    skin2 = pygame.transform.scale(pygame.image.load("zmaj2-leti.png"), (screen.get_width()*0.2265, screen.get_height()*0.365))
+    skin3 = pygame.transform.scale(pygame.image.load("zmaj3.png"), (screen.get_width()*0.2265, screen.get_height()*0.365))
     skin_brojac = 0
-    skinovi = [skin1, skin2]
+    skinovi = [skin1, skin2, skin3]
     arrow = pygame.transform.rotate(pygame.image.load("arrow.png"),90)
     strijelica1 = Button_Slika(screen.get_width()/8.5,screen.get_height()*0.85,arrow, 0.1)
     strijelica2 = Button_Slika(screen.get_width()/5,screen.get_height()*0.85,pygame.transform.flip(arrow, True, False), 0.1)
