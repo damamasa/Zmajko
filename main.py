@@ -319,8 +319,8 @@ def main_menu():
     skin_brojac = 0
     skinovi = [skin1, skin2]
     arrow = pygame.transform.rotate(pygame.image.load("arrow.png"),90)
-    strijelica1 = Button_Slika(screen.get_width()/8.5,screen.get_height()*0.82,arrow, 0.3)
-    strijelica2 = Button_Slika(screen.get_width()/6,screen.get_height()*0.82,pygame.transform.flip(arrow, True, False), 0.3)
+    strijelica1 = Button_Slika(screen.get_width()/8.5,screen.get_height()*0.85,arrow, 0.1)
+    strijelica2 = Button_Slika(screen.get_width()/5,screen.get_height()*0.85,pygame.transform.flip(arrow, True, False), 0.1)
     impossible_state = False
     bozic_state = False
     run = True
