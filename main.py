@@ -5,27 +5,27 @@ import os
 import sys
 
 class Button_Slika():
-    def __init__(self, x, y, image, scale):
-        width = image.get_width()
-        height = image.get_height()
-        self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.clicked = False
+	def __init__(self, x, y, image, scale):
+		width = image.get_width()
+		height = image.get_height()
+		self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
+		self.rect = self.image.get_rect()
+		self.rect.topleft = (x, y)
+		self.clicked = False
 
-    def draw(self, surface):
-        action = False
-        pos = pygame.mouse.get_pos()
+	def draw(self, surface):
+		action = False
+		pos = pygame.mouse.get_pos()
 
-        if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                self.clicked = True
-                action = True
+		if self.rect.collidepoint(pos):
+			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+				self.clicked = True
+				action = True
 
-        if pygame.mouse.get_pressed()[0] == 0:
-            self.clicked = False
-        surface.blit(self.image, (self.rect.x, self.rect.y))
-        return action
+		if pygame.mouse.get_pressed()[0] == 0:
+			self.clicked = False
+		surface.blit(self.image, (self.rect.x, self.rect.y))
+		return action
 
 class Button:
     def __init__(self, text_input, text_size, text_color, rectangle_width_and_height, rectangle_color, rectangle_hovering_color, position):
@@ -77,6 +77,19 @@ def main():
 ime = ""
 koji_user = ""
 
+def brisanje_usera():
+    global ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,uništeniProtivnici
+    ime =""
+    level_state = "Level 1-1"
+    postignuce1 = "ne"
+    postignuce2 = "ne"
+    postignuce3 = "ne"
+    postignuce4 = "ne"
+    postignuce5 = "ne"
+    postignuce6 = "ne"
+    uništeniProtivnici = "0"
+    spremi_igru()
+
 def user_birac():
     global screen, text_font, pozadina_slika, koji_user, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,igraci
     pozadina_slika = pygame.image.load("users_bg.png")
@@ -92,21 +105,27 @@ def user_birac():
     igraci = a.split("\n")
     for i, clan in enumerate(igraci):
         igraci[i] = clan.split("/")
-
     if koji_user != "":
         spremi_igru()
 
     run = True
-    while run == True:
-        MENU_MOUSE_POS = pygame.mouse.get_pos()
-        USER1_BUTTON = Button(f"{igraci[0][1]}      ({igraci[0][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.25))
-        USER2_BUTTON = Button(f"{igraci[1][1]}      ({igraci[1][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.37))
-        USER3_BUTTON = Button(f"{igraci[2][1]}      ({igraci[2][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.49))
-        USER4_BUTTON = Button(f"{igraci[3][1]}      ({igraci[3][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.61))
-        USER5_BUTTON = Button(f"{igraci[4][1]}      ({igraci[4][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.73))
-        USER6_BUTTON = Button(f"{igraci[5][1]}      ({igraci[5][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.85))
 
-        for gumb in [USER1_BUTTON, USER2_BUTTON, USER3_BUTTON, USER4_BUTTON, USER5_BUTTON, USER6_BUTTON]:
+    while run == True:
+        USER1_BUTTON = Button(f"{igraci[0][1]}({igraci[0][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.25))
+        USER1_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.25))
+        USER2_BUTTON = Button(f"{igraci[1][1]}({igraci[1][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.37))
+        USER2_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.37))
+        USER3_BUTTON = Button(f"{igraci[2][1]}({igraci[2][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.49))
+        USER3_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.49))
+        USER4_BUTTON = Button(f"{igraci[3][1]}({igraci[3][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.61))
+        USER4_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.61))
+        USER5_BUTTON = Button(f"{igraci[4][1]}({igraci[4][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.73))
+        USER5_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.73))
+        USER6_BUTTON = Button(f"{igraci[5][1]}({igraci[5][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.85))
+        USER6_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.85))
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+        for gumb in [USER1_BUTTON, USER2_BUTTON, USER3_BUTTON, USER4_BUTTON, USER5_BUTTON, USER6_BUTTON,USER1_DELETE,USER2_DELETE,USER3_DELETE,USER4_DELETE,USER5_DELETE,USER6_DELETE]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
             gumb.update(screen)
@@ -121,46 +140,71 @@ def user_birac():
                     run = False
                     koji_user = "1"
                     load_igru()
+                if USER1_DELETE.checkForCollision(MENU_MOUSE_POS):
+                    koji_user ="1"
+                    brisanje_usera()
+                    USER1_BUTTON.changeTextInput(f"{igraci[0][1]}({igraci[0][2]})")
                 if USER2_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     run = False
                     koji_user = "2"
                     load_igru()
+                if USER2_DELETE.checkForCollision(MENU_MOUSE_POS):
+                    koji_user ="2"
+                    brisanje_usera()
+                    USER2_BUTTON.changeTextInput(f"{igraci[1][1]}({igraci[1][2]})")
                 if USER3_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     run = False
                     koji_user = "3"
                     load_igru()
+                if USER3_DELETE.checkForCollision(MENU_MOUSE_POS):
+                    koji_user ="3"
+                    brisanje_usera()
+                    USER3_BUTTON.changeTextInput(f"{igraci[2][1]}({igraci[2][2]})")
                 if USER4_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     run = False
                     koji_user = "4"
                     load_igru()
+                if USER4_DELETE.checkForCollision(MENU_MOUSE_POS):
+                    koji_user ="4"
+                    brisanje_usera()
+                    USER4_BUTTON.changeTextInput(f"{igraci[3][1]}({igraci[3][2]})")
                 if USER5_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     run = False
                     koji_user = "5"
                     load_igru()
+                if USER5_DELETE.checkForCollision(MENU_MOUSE_POS):
+                    koji_user ="5"
+                    brisanje_usera()
+                    USER5_BUTTON.changeTextInput(f"{igraci[4][1]}({igraci[4][2]})")
                 if USER6_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     run = False
                     koji_user = "6"
                     load_igru()
+                if USER6_DELETE.checkForCollision(MENU_MOUSE_POS):
+                    koji_user ="6"
+                    brisanje_usera()
+                    USER6_BUTTON.changeTextInput(f"{igraci[5][1]}({igraci[5][2]})")
 
         pygame.display.update()
 
 def player_name():
-    global screen, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6, igraci
+    global screen, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6, igraci, uništeniProtivnici
     font = pygame.font.Font(None, 60)
     ime = ""
-    text_box = pygame.Rect(screen.get_width()*0.45, screen.get_height()*0.5, screen.get_width()*0.1, screen.get_height()*0.05)
+    text_box1 = pygame.Rect(screen.get_width()*0.45, screen.get_height()*0.5, screen.get_width()*0.1, screen.get_height()*0.05)
     pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
     pozadina.fill("Black")
     pozadina.set_alpha(100)
     screen.blit(pozadina, (0,0))
     screen.blit(pygame.transform.scale(pozadina_slika, (screen.get_width()*0.7, screen.get_height()*0.7)), (screen.get_width()/2-screen.get_width()*0.35, screen.get_height()/2-screen.get_height()*0.35))
-    draw_text("Unesi ime:",font,"black",screen.get_width()/2.35,screen.get_height()/2.5)
     run = True
     while run == True:
-        pygame.draw.rect(screen,"black", text_box, 4)
+        screen.blit(pozadina_slika,(0,0)) 
+        pygame.draw.rect(screen,"black", text_box1, 3)
         surf1 = font.render(ime,True,'white')
-        screen.blit(surf1, (text_box.x +5 , text_box.y +5))
-        text_box.w = max(100, surf1.get_width()+10)
+        screen.blit(surf1, (text_box1.x + 5, text_box1.y + 5))
+        text_box1.w = max(200, surf1.get_width()+10)
+        draw_text("Unesi ime:",font,"black",screen.get_width()/2.25,screen.get_height()/2.5)
         
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         POTVRDA_BUTTON = Button(f"Potvrdi", 50, "Black", (220, 120), "Light Grey", "White", (screen.get_width()/2, screen.get_height()/1.5))
@@ -188,6 +232,7 @@ def player_name():
                     postignuce4 = igraci[int(koji_user)-1][6]
                     postignuce5 = igraci[int(koji_user)-1][7]
                     postignuce6 = igraci[int(koji_user)-1][8]
+                    uništeniProtivnici = int(igraci[int(koji_user)-1][9])
                     run = False
                     main_menu()
             if event.type == pygame.KEYDOWN:
@@ -200,9 +245,26 @@ def player_name():
 def postignuca():
     global screen
     font = pygame.font.Font(None, 60)
-    boja = (255, 255, 255)
     bg = pygame.transform.scale(pygame.image.load("users_bg.png"), (screen.get_width(), screen.get_height()))
     run2 = True
+    tekst1 = ""
+    tekst2 = ""
+    tekst3 = ""
+    tekst4 = ""
+    tekst5 = ""
+    tekst6 = ""
+    if postignuce1 == "da":
+        tekst1 = "Neprobojni Štit: Preživi neprekidni napad neprijatelja bez gubitaka zdravlja."
+    if postignuce2 == "da":
+        tekst2 ="Branič Svemira: Uništi 100 protivničkih trupa."
+    if postignuce3 == "da":
+        tekst3="Gospodar Svjetova: Prođi sve svjetove i postani nepobjedivi letač."
+    if postignuce4 == "da":
+        tekst4="HoHoHo: Prođi božićni level."
+    if postignuce5 == "da":
+        tekst5="Apsolutni Pobjednik: Prođi nemogući svijet."
+    if postignuce6 == "da":
+        tekst6="Zmajkova Legenda: Otključaj sva postignuća da postaneš legenda poput Zmajka. "
     while run2:
         screen.blit(bg, (0, 0))
         for event in pygame.event.get():
@@ -211,36 +273,30 @@ def postignuca():
                 sys.exit() 
             if event.type == pygame.KEYDOWN and (event.key == pygame.K_p or event.key == pygame.K_ESCAPE):
                 run2 = False
-                main_menu()
-            if postignuce1 == "da":
-                draw_text("Neprobojni Štit: Preživi neprekidni napad neprijatelja bez gubitaka zdravlja.",font,"white",200,100)
-            if postignuce2 == "da":
-                draw_text("radi",font,"white",200,200)
-            if postignuce3 == "da":
-                draw_text("radi",font,"white",200,300)
-            if postignuce4 == "da":
-                draw_text("radi",font,"white",200,400)
-            if postignuce5 == "da":
-                draw_text("radi",font,"white",200,500)
-            if postignuce6 == "da":
-                draw_text("radi",font,"white",200,600)
-                
+                main_menu()      
+        draw_text(tekst1,font,"white",200,100)
+        draw_text(tekst2,font,"white",200,200)
+        draw_text(tekst3,font,"white",200,300)
+        draw_text(tekst4,font,"white",200,400)
+        draw_text(tekst5,font,"white",200,500)
+        draw_text(tekst6,font,"white",200,600)
 
         pygame.display.update()
 
 def spremi_igru():
-    global igraci, koji_user, ime,level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6, output
-    igraci[int(koji_user)-1] = [koji_user,ime,level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6]
+    global igraci, koji_user, ime,level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6, output, uništeniProtivnici
+    igraci[int(koji_user)-1] = [koji_user,ime,level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,str(uništeniProtivnici)]
     output = ""
-    for i in range(len(igraci)-1):
-        for l in range(len(igraci[i])-1):
+    for i in range(len(igraci)):
+        for l in range(len(igraci[i])):
             output += igraci[i][l]+"/"
+        output = output[0:len(output)-1]
         output += "\n"
     with open("igraci.txt","w") as datoteka:
         datoteka.write(output)
 
 def load_igru():
-    global koji_user, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,igraci
+    global koji_user, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,igraci, uništeniProtivnici
     if igraci[int(koji_user)-1][1] == "":
         player_name()
     else:
@@ -251,11 +307,12 @@ def load_igru():
         postignuce4 = igraci[int(koji_user)-1][6]
         postignuce5 = igraci[int(koji_user)-1][7]
         postignuce6 = igraci[int(koji_user)-1][8]
+        uništeniProtivnici = int(igraci[int(koji_user)-1][9])
         ime = igraci[int(koji_user)-1][1]
         main_menu()
 
 def main_menu():
-    global screen, text_font, text_font2, skinovi, skin_brojac, igraci
+    global screen, text_font, text_font2, skinovi, skin_brojac, igraci, impossible_state, odabrani_level, replay_state, bozic_state
     zmajko_pozadina = pygame.transform.scale(pygame.image.load("pozadina_mainmenu.png"), (screen.get_width(), screen.get_height()))
     skin1 = pygame.transform.scale(pygame.image.load("zmaj.png"), (screen.get_width()*0.2265, screen.get_height()*0.365))
     skin2 = pygame.transform.scale(pygame.image.load("zmaj2.jpg"), (screen.get_width()*0.2265, screen.get_height()*0.365))
@@ -264,18 +321,23 @@ def main_menu():
     arrow = pygame.transform.rotate(pygame.image.load("arrow.png"),90)
     strijelica1 = Button_Slika(screen.get_width()/8.5,screen.get_height()*0.82,arrow, 0.3)
     strijelica2 = Button_Slika(screen.get_width()/6,screen.get_height()*0.82,pygame.transform.flip(arrow, True, False), 0.3)
+    impossible_state = False
+    bozic_state = False
     run = True
+    
     while run == True:
         screen.blit(zmajko_pozadina, (0,0))    
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
         #gumbovi na desnoj strani
-        IGRAJ_GUMB = Button("Kampanja", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()/2.5))
-        LEVEL_GUMB = Button("Nemoguć level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()/1.85))
-        ACHIEVEMENTS_GUMB = Button("Postignuća", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()/1.45))
-        QUIT_BUTTON = Button("Izađi", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()/1.175))
+        IGRAJ_GUMB = Button("Kampanja", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.3))
+        LEVEL_GUMB = Button("Nemoguć level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.45))
+        BOZIC_GUMB = Button("Božićni level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.6))
+        ACHIEVEMENTS_GUMB = Button("Postignuća", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.75))
+        QUIT_BUTTON = Button("Izađi", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.9))
         USERS_BUTTON = Button("Promijeni igrača", 50, "Blue", (screen.get_width()/5.5, screen.get_height()/20), "#AE7A60", "darksalmon", (screen.get_width()*0.172, screen.get_height()/3.2))
-        for gumb in [IGRAJ_GUMB, QUIT_BUTTON, LEVEL_GUMB, ACHIEVEMENTS_GUMB, USERS_BUTTON]:
+        TUTORIAL_BUTTON = Button("Kako igrati?", 50, "Black", (screen.get_width()/5.5, screen.get_height()/20), "#AE7A60", "darksalmon", (screen.get_width()*0.45, screen.get_height()/2))
+        for gumb in [IGRAJ_GUMB, QUIT_BUTTON, LEVEL_GUMB, ACHIEVEMENTS_GUMB, USERS_BUTTON, BOZIC_GUMB, TUTORIAL_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
             gumb.update(screen)
@@ -313,6 +375,50 @@ def main_menu():
                     sys.exit()
                 if ACHIEVEMENTS_GUMB.checkForCollision(MENU_MOUSE_POS):
                     postignuca()
+                if LEVEL_GUMB.checkForCollision(MENU_MOUSE_POS):
+                    impossible_state = True
+                    odabrani_level = "NEĆEŠ PREŽIVJETI"
+                    replay_state = False
+                    impossibleLevel()
+                if BOZIC_GUMB.checkForCollision(MENU_MOUSE_POS):
+                    bozic_state = True
+                    odabrani_level = "Sretan Božić!"
+                    replay_state = False
+                    bozicLevel()
+                if TUTORIAL_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    tutorial()
+
+        pygame.display.update()
+
+def tutorial():
+    global screen, text_font, pozadina_slika
+    pozadina_slika = pygame.image.load("users_bg.png")
+    pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
+    pozadina.fill("Black")
+    pozadina.set_alpha(100)
+    screen.blit(pozadina, (0,0))
+    screen.blit(pygame.transform.scale(pozadina_slika, (screen.get_width()*0.9, screen.get_height()*0.9)), (screen.get_width()/2-screen.get_width()*0.45, screen.get_height()/2-screen.get_height()*0.45))
+    draw_text("Kako igrati",text_font,"black",screen.get_width()/2.35,screen.get_height()/8)
+    tutorial_tekst = ["W - gore", "A - lijevo", "S - dolje", "D - desno", "SPACE - pucanje", "Lijevi klik/Desni klik - mijenjanje powerupova", "P/ESC - pauza"]
+    for i in range(len(tutorial_tekst)):
+        draw_text(tutorial_tekst[i],text_font,"black",screen.get_width()/5,screen.get_height()*(0.2+(0.1*i)))
+    run = True
+    while run == True:
+        NASTAVI_BUTTON = Button("Dalje", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.85))
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+        for gumb in [NASTAVI_BUTTON]:
+            if gumb.checkForCollision(MENU_MOUSE_POS):
+                gumb.changeButtonColor()
+            gumb.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                spremi_igru()
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if NASTAVI_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    main_menu()
 
         pygame.display.update()
 
@@ -511,6 +617,38 @@ def promijeni_level():
         brojVjetra = 1
         brojVanzemaljca = 5
 
+def impossibleLevel():
+    global brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojAviona, brojMeteora, brojVjetra, vanzemaljac_state, brojVanzemaljca, pozadina, impossible_state
+    pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
+    brojPtica = 20
+    brzinaStvaranja = 1.5
+    final_vrijeme = 20
+    avioni_state=True
+    meteori_state = True
+    vjetar_state = True
+    vanzemaljac_state = True
+    brojAviona = 5
+    brojMeteora = 5
+    brojVjetra = 1
+    brojVanzemaljca = 5
+    igra()
+
+def bozicLevel():
+    global brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojAviona, brojMeteora, brojVjetra, vanzemaljac_state, brojVanzemaljca, pozadina, impossible_state
+    pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
+    brojPtica = 15
+    brzinaStvaranja = 1.5
+    final_vrijeme = 20
+    avioni_state=True
+    meteori_state = True
+    vjetar_state = True
+    vanzemaljac_state = True
+    brojAviona = 3
+    brojMeteora = 3
+    brojVjetra = 1
+    brojVanzemaljca = 2
+    igra()
+
 def level_menu():
     global screen, text_font, text_font2, level_state, replay_state, odabrani_level
     pozadina_y = int(level_state[-3])
@@ -554,19 +692,11 @@ def level_menu():
         MAIN_GUMB = Button("Vrati se", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()*0.1, screen.get_height()*0.9))
         draw_text(f"{odabrani_level}",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/10)
 
-        for gumb in [IGRAJ_GUMB, MAIN_GUMB]:
+        for gumb in [IGRAJ_GUMB, MAIN_GUMB, LEVEL1_GUMB, LEVEL2_GUMB]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
             gumb.update(screen)
-
-        for gumb in [LEVEL1_GUMB, LEVEL2_GUMB]:
-            if int(gumb.text_input[0]) <= int(level_state[-3]):
-                if int(gumb.text_input[2]) <= int(level_state[-1]):
-                    if gumb.checkForCollision(MENU_MOUSE_POS):
-                        gumb.changeButtonColor()
-                    gumb.update(screen)
-            
-    
+               
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 spremi_igru()
@@ -581,16 +711,36 @@ def level_menu():
                     run = False
                     main_menu()
                 if LEVEL1_GUMB.checkForCollision(MENU_MOUSE_POS):
-                    odabrani_level = "Level "+LEVEL1_GUMB.text_input
-                    replay_state = True
+                    if LEVEL1_GUMB.text_input[0] <= level_state[-3]:
+                        if LEVEL1_GUMB.text_input[-1] <= level_state[-1]:
+                            odabrani_level = "Level "+LEVEL1_GUMB.text_input
+                            replay_state = True
+                        else:
+                            draw_text(f"Otkljućaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
+                            pygame.display.update()
+                            time.sleep(2) 
+                    else:
+                        draw_text(f"Otkljućaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
+                        pygame.display.update()
+                        time.sleep(2) 
                 if LEVEL2_GUMB.checkForCollision(MENU_MOUSE_POS):
-                    odabrani_level = "Level "+LEVEL2_GUMB.text_input
-                    replay_state = True
-        
+                    if LEVEL2_GUMB.text_input[0] <= level_state[-3]:
+                        if LEVEL2_GUMB.text_input[-1] <= level_state[-1]:
+                            odabrani_level = "Level "+LEVEL2_GUMB.text_input
+                            replay_state = True
+                        else:
+                            draw_text(f"Otkljućaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
+                            pygame.display.update()
+                            time.sleep(2)               
+                    else:
+                        draw_text(f"Otkljućaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
+                        pygame.display.update()
+                        time.sleep(2)
+
         pygame.display.update()
 
 def igra():
-    global screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, pozadina, skin_brojac, skinovi, level_state, postignuce1
+    global screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, pozadina, skin_brojac, skinovi, level_state,uništeniProtivnici, postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,impossible_state,bozic_state
     #slike
     zmaj_slika_og = skinovi[skin_brojac] #slika zmaja po skinu
     protivnik_og = pygame.image.load("birds.png")
@@ -836,7 +986,7 @@ def igra():
     def stvoriVanzemaljca():
         for i in range(brojVanzemaljca): #stvaranje meteora
             #noviW i noviH
-            vanzemaljacNoviWiH = zmaj_w/random.uniform(zmaj_w, zmaj_w/1.2)
+            vanzemaljacNoviWiH = zmaj_w/random.uniform(zmaj_w/1.4, zmaj_w/1.6)
             VanzemaljacW.append(zmaj_w/vanzemaljacNoviWiH)
             VanzemaljacH.append(zmaj_h/vanzemaljacNoviWiH)
             #noviX
@@ -874,7 +1024,7 @@ def igra():
 
     def vratiAvion(i):
         if min(AvionX) >= 0:
-            AvionX[i] = min(AvionX) - AvionW[i]*brzinaStvaranja #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
+            AvionX[i] = 0 - AvionW[i]*brzinaStvaranja #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
             avionNoviY = random.uniform(screen.get_height()/4, screen.get_height()*0.8)
             while abs(AvionY[i-1]-avionNoviY) < AvionH[i]:
                 avionNoviY = random.uniform(screen.get_height()/4, screen.get_height()*0.8)
@@ -1086,26 +1236,30 @@ def igra():
             if ProtivnikY[i] > screen.get_height(): #respawnanje protivnika
                 vratiProtivnika(i)
                 
-            if pygame.Rect(ProtivnikX[i], ProtivnikY[i], ProtivnikW[i], ProtivnikH[i]).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)) and isHit == False: #collision protivnika
+            if pygame.Rect(ProtivnikX[i]+ProtivnikW[i]*0.15, ProtivnikY[i]+ProtivnikH[i]*0.15, ProtivnikW[i]*0.7, ProtivnikH[i]*0.7).colliderect(pygame.Rect(zmaj_x+zmaj_w*0.15,zmaj_y+zmaj_h*0.15,zmaj_w*0.7,zmaj_h*0.7)) and isHit == False: #collision protivnika
                 život -= 1
                 isHit = True
                 timer1 = vrijeme
             
             if pygame.Rect(ProtivnikX[i], ProtivnikY[i], ProtivnikW[i], ProtivnikH[i]).colliderect(pygame.Rect(power1_x, power1_y, power1_w, power1_h)): #collision pucnja i protivnika
                 ispaljeno1 = False
+                uništeniProtivnici += 1
                 vratiProtivnika(i)
             
             if ispaljeno2 == True:
                 if pygame.Rect(ProtivnikX[i], ProtivnikY[i], ProtivnikW[i], ProtivnikH[i]).colliderect(pygame.Rect(power2_x, power2_y, power2_w, power2_h)): #collision pucnja i protivnika
+                    uništeniProtivnici += 1
                     vratiProtivnika(i)
             
             if ispaljeno3 == True:
                 if pygame.Rect(ProtivnikX[i], ProtivnikY[i], ProtivnikW[i], ProtivnikH[i]).colliderect(pygame.Rect(power3_x, power3_y, power3_w, power3_h)): #collision pucnja i protivnika
+                    uništeniProtivnici += 1
                     vratiProtivnika(i)
             
             if ispaljeno4 == True:
                 for l in range(3):
                     if pygame.Rect(ProtivnikX[i], ProtivnikY[i], ProtivnikW[i], ProtivnikH[i]).colliderect(pygame.Rect(power4_x[l], power4_y[l], power4_w, power4_h)): #collision pucnja i protivnika
+                        uništeniProtivnici += 1
                         vratiProtivnika(i)
 
         if avioni_state == True:
@@ -1116,26 +1270,30 @@ def igra():
                 if AvionX[i] > screen.get_width()*0.834895:
                     vratiAvion(i)
                     
-                if pygame.Rect(AvionX[i], AvionY[i], AvionW[i], AvionH[i]).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)) and isHit == False: #collision protivnika
+                if pygame.Rect(AvionX[i]+AvionW[i]*0.1, AvionY[i]+AvionH[i]*0.1, AvionW[i]*0.8, AvionH[i]*0.8).colliderect(pygame.Rect(zmaj_x+zmaj_w*0.15,zmaj_y+zmaj_h*0.15,zmaj_w*0.7,zmaj_h*0.7)) and isHit == False: #collision protivnika
                     život -= 1
                     isHit = True
                     timer1 = vrijeme
                 
                 if pygame.Rect(AvionX[i], AvionY[i], AvionW[i], AvionH[i]).colliderect(pygame.Rect(power1_x, power1_y, power1_w, power1_h)): #collision pucnja i protivnika
                     ispaljeno1 = False
+                    uništeniProtivnici += 1
                     vratiAvion(i)
                 
                 if ispaljeno2 == True:
                     if pygame.Rect(AvionX[i], AvionY[i], AvionW[i], AvionH[i]).colliderect(pygame.Rect(power2_x, power2_y, power2_w, power2_h)): #collision pucnja i protivnika
+                        uništeniProtivnici += 1
                         vratiAvion(i)
                 
                 if ispaljeno3 == True:
                     if pygame.Rect(AvionX[i], AvionY[i], AvionW[i], AvionH[i]).colliderect(pygame.Rect(power3_x, power3_y, power3_w, power3_h)): #collision pucnja i protivnika
+                        uništeniProtivnici += 1
                         vratiAvion(i)
 
                 if ispaljeno4 == True:
                     for l in range(3):
                         if pygame.Rect(AvionX[i], AvionY[i], AvionW[i], AvionH[i]).colliderect(pygame.Rect(power4_x[l], power4_y[l], power4_w, power4_h)): #collision pucnja i protivnika
+                            uništeniProtivnici += 1
                             vratiAvion(i)
 
         if meteori_state == True:
@@ -1150,7 +1308,7 @@ def igra():
                 if MeteorX[i] > screen.get_width()*0.834895-MeteorW[i] or MeteorX[i] <= 0: #ako meteor dira granice, odbija se u drugu stranu
                     MeteorPomakX[i] = -1*MeteorPomakX[i]
 
-                if pygame.Rect(MeteorX[i], MeteorY[i], MeteorW[i], MeteorH[i]).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)) and isHit == False: #collision protivnika
+                if pygame.Rect(MeteorX[i]+MeteorW[i]*0.1, MeteorY[i]+MeteorH[i]*0.1, MeteorW[i]*0.8, MeteorH[i]*0.8).colliderect(pygame.Rect(zmaj_x+zmaj_w*0.15,zmaj_y+zmaj_h*0.15,zmaj_w*0.7,zmaj_h*0.7)) and isHit == False: #collision protivnika
                     život -= 1
                     isHit = True
                     timer1 = vrijeme
@@ -1162,15 +1320,18 @@ def igra():
                 if ispaljeno2 == True:
                     if pygame.Rect(MeteorX[i], MeteorY[i], MeteorW[i], MeteorH[i]).colliderect(pygame.Rect(power2_x, power2_y, power2_w, power2_h)): #collision pucnja i protivnika
                         ispaljeno2 = False
+                        uništeniProtivnici += 1
                         vratiMeteor(i)
 
                 if ispaljeno3 == True:
                     if pygame.Rect(MeteorX[i], MeteorY[i], MeteorW[i], MeteorH[i]).colliderect(pygame.Rect(power3_x, power3_y, power3_w, power3_h)): #collision pucnja i protivnika
+                        uništeniProtivnici += 1
                         vratiMeteor(i)
                 
                 if ispaljeno4 == True:
                     for l in range(3):
                         if pygame.Rect(MeteorX[i], MeteorY[i], MeteorW[i], MeteorH[i]).colliderect(pygame.Rect(power4_x[l], power4_y[l], power4_w, power4_h)): #collision pucnja i protivnika
+                            uništeniProtivnici += 1
                             vratiMeteor(i)
 
         if vjetar_state == True:
@@ -1181,11 +1342,12 @@ def igra():
                 if VjetarX[i] < -VjetarW[i]:
                     vratiVjetar(i)
                     
-                if pygame.Rect(VjetarX[i], VjetarY[i], VjetarW[i], VjetarH[i]).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)): #collision protivnika
+                if pygame.Rect(VjetarX[i], VjetarY[i], VjetarW[i], VjetarH[i]).colliderect(pygame.Rect(zmaj_x+zmaj_w*0.15,zmaj_y+zmaj_h*0.15,zmaj_w*0.7,zmaj_h*0.7)): #collision protivnika
                     zmaj_x -= VjetarPomakX[i]
                 
                 if ispaljeno3 == True:
                     if pygame.Rect(VjetarX[i], VjetarY[i], VjetarW[i], VjetarH[i]).colliderect(pygame.Rect(power3_x,power3_y,power3_w,power3_h)): #collision protivnika
+                        uništeniProtivnici += 1
                         vratiVjetar(i)
                 
         if vanzemaljac_state == True:
@@ -1201,7 +1363,7 @@ def igra():
                 if VanzemaljacX[i] > screen.get_width()*0.834895-VanzemaljacW[i] or VanzemaljacX[i] <= 0: #ako meteor dira granice, odbija se u drugu stranu
                     VanzemaljacPomakX[i] = -1*VanzemaljacPomakX[i]
 
-                if pygame.Rect(VanzemaljacX[i], VanzemaljacY[i], VanzemaljacW[i], VanzemaljacH[i]).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)) and isHit == False: #collision protivnika
+                if pygame.Rect(VanzemaljacX[i]+VanzemaljacW[i]*0.1, VanzemaljacY[i]+VanzemaljacH[i]*0.1, VanzemaljacW[i]*0.8, VanzemaljacH[i]*0.8).colliderect(pygame.Rect(zmaj_x+zmaj_w*0.15,zmaj_y+zmaj_h*0.15,zmaj_w*0.7,zmaj_h*0.7)) and isHit == False: #collision protivnika
                     život -= 1
                     isHit = True
                     timer1 = vrijeme
@@ -1210,22 +1372,26 @@ def igra():
                     if pygame.Rect(VanzemaljacX[i], VanzemaljacY[i], VanzemaljacW[i], VanzemaljacH[i]).colliderect(pygame.Rect(power1_x, power1_y, power1_w, power1_h)): #collision pucnja i protivnika
                         ispaljeno1 = False
                         vanzemaljac_pucanje[i] = False
+                        uništeniProtivnici += 1
                         vratiVanzemaljca(i)
                 
                 if ispaljeno2 == True:
                     if pygame.Rect(VanzemaljacX[i], VanzemaljacY[i], VanzemaljacW[i], VanzemaljacH[i]).colliderect(pygame.Rect(power2_x, power2_y, power2_w, power2_h)): #collision pucnja i protivnika
                         vanzemaljac_pucanje[i] = False
+                        uništeniProtivnici += 1
                         vratiVanzemaljca(i)
                 
                 if ispaljeno3 == True:
                     if pygame.Rect(VanzemaljacX[i], VanzemaljacY[i], VanzemaljacW[i], VanzemaljacH[i]).colliderect(pygame.Rect(power3_x, power3_y, power3_w, power3_h)): #collision pucnja i protivnika
                         vanzemaljac_pucanje[i] = False
+                        uništeniProtivnici += 1
                         vratiVanzemaljca(i)
                 
                 if ispaljeno4 == True:
                     for l in range(3):
                         if pygame.Rect(VanzemaljacX[i], VanzemaljacY[i], VanzemaljacW[i], VanzemaljacH[i]).colliderect(pygame.Rect(power4_x[l], power4_y[l], power4_w, power4_h)): #collision pucnja i protivnika
                             vanzemaljac_pucanje[i] = False
+                            uništeniProtivnici += 1
                             vratiVanzemaljca(i)
 
                 if vanzemaljac_pucanje[i] == True:
@@ -1239,7 +1405,7 @@ def igra():
                     VanzemaljacPucanjX[i] = VanzemaljacX[i] +VanzemaljacW[i]/2
                     VanzemaljacPucanjY[i] = VanzemaljacY[i] + VanzemaljacH[i]/2
                 
-                if pygame.Rect(VanzemaljacPucanjX[i], VanzemaljacPucanjY[i], power1_w, power1_h*1.5).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)) and isHit == False: #collision protivnika
+                if pygame.Rect(VanzemaljacPucanjX[i], VanzemaljacPucanjY[i], power1_w, power1_h*1.5).colliderect(pygame.Rect(zmaj_x+zmaj_w*0.15,zmaj_y+zmaj_h*0.15,zmaj_w*0.7,zmaj_h*0.7)) and isHit == False: #collision protivnika
                     život -= 1
                     isHit = True
                     timer1 = vrijeme
@@ -1362,9 +1528,21 @@ def igra():
         if progress == 1: #runda je gotova
             if život == 2: #nisi pogođen
                 postignuce1 = "da"
+            if uništeniProtivnici >= 100:
+                postignuce2 = "da"
+            if level_state == "Level 5-2":
+                postignuce3 = "da"
+            if impossible_state == True: #nemogući level
+                postignuce4 = "da"
+                main_menu()
+            if bozic_state == True:
+                postignuce5 = "da"
+                main_menu()
+            if postignuce1 == "da" and postignuce2 == "da" and postignuce3 == "da" and postignuce4 == "da" and postignuce5 == "da":
+                postignuce6 = "da"
                 
             run = False
-            if replay_state == False:
+            if replay_state == False and impossible_state == False and bozic_state == False:
                 if level_state == "Level 1-1": #mijenjanje levela
                     level_state = "Level 1-2"
                 elif level_state == "Level 1-2":
@@ -1384,15 +1562,11 @@ def igra():
                 elif level_state == "Level 5-1":
                     level_state = "Level 5-2"
             level_menu()
-
         if život < 0: #pokrece game_over funkciju ako ostaneš bez života
             run = False
             game_over()
         
         pygame.display.update()
-
-if __name__ == "__main__":
-    main()
 
 if __name__ == "__main__":
     main()
