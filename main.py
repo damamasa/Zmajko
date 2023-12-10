@@ -112,17 +112,17 @@ def user_birac():
 
     while run == True:
         USER1_BUTTON = Button(f"{igraci[0][1]}({igraci[0][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.25))
-        USER1_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.25))
+        USER1_DELETE = Button(f"x", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.25))
         USER2_BUTTON = Button(f"{igraci[1][1]}({igraci[1][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.37))
-        USER2_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.37))
+        USER2_DELETE = Button(f"x", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.37))
         USER3_BUTTON = Button(f"{igraci[2][1]}({igraci[2][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.49))
-        USER3_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.49))
+        USER3_DELETE = Button(f"x", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.49))
         USER4_BUTTON = Button(f"{igraci[3][1]}({igraci[3][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.61))
-        USER4_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.61))
+        USER4_DELETE = Button(f"x", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.61))
         USER5_BUTTON = Button(f"{igraci[4][1]}({igraci[4][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.73))
-        USER5_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.73))
+        USER5_DELETE = Button(f"x", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.73))
         USER6_BUTTON = Button(f"{igraci[5][1]}({igraci[5][2]})", 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.85))
-        USER6_DELETE = Button(f"izbrisi", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.85))
+        USER6_DELETE = Button(f"x", 70, "Light Grey", (screen.get_width()*0.3, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.85))
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         for gumb in [USER1_BUTTON, USER2_BUTTON, USER3_BUTTON, USER4_BUTTON, USER5_BUTTON, USER6_BUTTON,USER1_DELETE,USER2_DELETE,USER3_DELETE,USER4_DELETE,USER5_DELETE,USER6_DELETE]:
