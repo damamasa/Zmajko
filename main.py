@@ -678,8 +678,8 @@ def level_menu():
             LEVEL1_GUMB = Button("5-1", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.32, screen.get_height()*0.655))
             LEVEL2_GUMB = Button("5-2", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.69, screen.get_height()*0.28))
         screen.blit(leveli_pozadina, (0,0))
-        gore_arrow = Button_Slika(screen.get_width()/2.5,screen.get_height()*0.1,arrow, 0.5)
-        dolje_arrow = Button_Slika(screen.get_width()/2.5,screen.get_height()*0.9,pygame.transform.flip(arrow, False, True), 0.5)
+        gore_arrow = Button_Slika(screen.get_width()/2.5,screen.get_height()*0.05,arrow, 0.3)
+        dolje_arrow = Button_Slika(screen.get_width()/2.5,screen.get_height()*0.85,pygame.transform.flip(arrow, False, True), 0.3)
         if gore_arrow.draw(screen) and pozadina_y < 5:
             pozadina_y +=1
             time.sleep(0.2)
