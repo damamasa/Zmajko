@@ -74,57 +74,78 @@ def main():
     while not run:
         run = main_menu()
 
-user1ime = ""
-user2ime = ""
 ime = ""
+koji_user = ""
+
 def user_birac():
-    global screen, text_font, pozadina_slika, koji_user, ime
-    pozadina_slika = pygame.image.load("slike/users_bg.png")
+    global screen, text_font, pozadina_slika, koji_user, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,igraci
+    pozadina_slika = pygame.image.load("users_bg.png")
     pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
     pozadina.fill("Black")
     pozadina.set_alpha(100)
     screen.blit(pozadina, (0,0))
     screen.blit(pygame.transform.scale(pozadina_slika, (screen.get_width()*0.9, screen.get_height()*0.9)), (screen.get_width()/2-screen.get_width()*0.45, screen.get_height()/2-screen.get_height()*0.45))
-    draw_text("Birač računa",text_font,"black",screen.get_width()/2.35,screen.get_height()/6)
-    koji_user = ""
+    draw_text("Birač računa",text_font,"black",screen.get_width()/2.35,screen.get_height()/8)
+
+    with open("igraci.txt", "r") as datoteka:
+        a = datoteka.read()
+    igraci = a.split("\n")
+    for i, clan in enumerate(igraci):
+        igraci[i] = clan.split("/")
+
+    if koji_user != "":
+        spremi_igru()
+
     run = True
     while run == True:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
-        USER1_BUTTON = Button(f"{user1ime}", 70, "White", (220, 120), "Light Grey", "White", (screen.get_width()/2, screen.get_height()/2))
-        USER2_BUTTON = Button(f"{user2ime}", 70, "White", (220, 120), "Light Grey", "White", (screen.get_width()/2, screen.get_height()/1.5))
+        USER1_BUTTON = Button(f"{igraci[0][1]}      ({igraci[0][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.25))
+        USER2_BUTTON = Button(f"{igraci[1][1]}      ({igraci[1][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.37))
+        USER3_BUTTON = Button(f"{igraci[2][1]}      ({igraci[2][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.49))
+        USER4_BUTTON = Button(f"{igraci[3][1]}      ({igraci[3][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.61))
+        USER5_BUTTON = Button(f"{igraci[4][1]}      ({igraci[4][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.73))
+        USER6_BUTTON = Button(f"{igraci[5][1]}      ({igraci[5][2]})", 70, "Light Grey", (screen.get_width()*0.7, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.43, screen.get_height()*0.85))
 
-        for gumb in [USER1_BUTTON, USER2_BUTTON]:
+        for gumb in [USER1_BUTTON, USER2_BUTTON, USER3_BUTTON, USER4_BUTTON, USER5_BUTTON, USER6_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
             gumb.update(screen)
-        
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                spremi_igru()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if USER1_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     run = False
-                    if user1ime == "":
-                        koji_user = "1"
-                        player_name()
-                    else:
-                        ime = user1ime
-                        main_menu()
+                    koji_user = "1"
+                    load_igru()
                 if USER2_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     run = False
-                    if user2ime == "":
-                        koji_user = "2"
-                        player_name()
-                    else:
-                        ime = user2ime
-                        main_menu()
+                    koji_user = "2"
+                    load_igru()
+                if USER3_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    run = False
+                    koji_user = "3"
+                    load_igru()
+                if USER4_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    run = False
+                    koji_user = "4"
+                    load_igru()
+                if USER5_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    run = False
+                    koji_user = "5"
+                    load_igru()
+                if USER6_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    run = False
+                    koji_user = "6"
+                    load_igru()
 
         pygame.display.update()
 
 def player_name():
-    global screen, ime, user1ime, user2ime
+    global screen, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6, igraci
     font = pygame.font.Font(None, 60)
     ime = ""
     text_box = pygame.Rect(screen.get_width()*0.45, screen.get_height()*0.5, screen.get_width()*0.1, screen.get_height()*0.05)
@@ -149,12 +170,24 @@ def player_name():
             gumb.update(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                spremi_igru()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if POTVRDA_BUTTON.checkForCollision(MENU_MOUSE_POS) and len(ime) > 1:
-                    with open("igraci", "a") as datoteka:
-                        datoteka.write(koji_user + "/" + ime + "\n")
+                    with open("igraci.txt", "r") as datoteka:
+                        a = datoteka.read()
+                    igraci = a.split("\n")
+                    for i, clan in enumerate(igraci):
+                        igraci[i] = clan.split("/")
+                    igraci[int(koji_user)-1][1] = ime
+                    level_state = igraci[int(koji_user)-1][2]
+                    postignuce1 = igraci[int(koji_user)-1][3]
+                    postignuce2 = igraci[int(koji_user)-1][4]
+                    postignuce3 = igraci[int(koji_user)-1][5]
+                    postignuce4 = igraci[int(koji_user)-1][6]
+                    postignuce5 = igraci[int(koji_user)-1][7]
+                    postignuce6 = igraci[int(koji_user)-1][8]
                     run = False
                     main_menu()
             if event.type == pygame.KEYDOWN:
@@ -162,21 +195,73 @@ def player_name():
                     ime = ime[:-1]
                 else:
                     ime += event.unicode
-
-        if koji_user == "1":
-            user1ime = ime
-        elif koji_user == "2":
-            user2ime = ime
         pygame.display.update()
 
+def postignuca():
+    global screen
+    font = pygame.font.Font(None, 60)
+    boja = (255, 255, 255)
+    bg = pygame.transform.scale(pygame.image.load("users_bg.png"), (screen.get_width(), screen.get_height()))
+    run2 = True
+    while run2:
+        screen.blit(bg, (0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run2 = False
+                sys.exit() 
+            if event.type == pygame.KEYDOWN and (event.key == pygame.K_p or event.key == pygame.K_ESCAPE):
+                run2 = False
+                main_menu()
+            if postignuce1 == "da":
+                draw_text("Neprobojni Štit: Preživi neprekidni napad neprijatelja bez gubitaka zdravlja.",font,"white",200,100)
+            if postignuce2 == "da":
+                draw_text("radi",font,"white",200,200)
+            if postignuce3 == "da":
+                draw_text("radi",font,"white",200,300)
+            if postignuce4 == "da":
+                draw_text("radi",font,"white",200,400)
+            if postignuce5 == "da":
+                draw_text("radi",font,"white",200,500)
+            if postignuce6 == "da":
+                draw_text("radi",font,"white",200,600)
+                
+
+        pygame.display.update()
+
+def spremi_igru():
+    global igraci, koji_user, ime,level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6, output
+    igraci[int(koji_user)-1] = [koji_user,ime,level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6]
+    output = ""
+    for i in range(len(igraci)-1):
+        for l in range(len(igraci[i])-1):
+            output += igraci[i][l]+"/"
+        output += "\n"
+    with open("igraci.txt","w") as datoteka:
+        datoteka.write(output)
+
+def load_igru():
+    global koji_user, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,igraci
+    if igraci[int(koji_user)-1][1] == "":
+        player_name()
+    else:
+        level_state = igraci[int(koji_user)-1][2]
+        postignuce1 = igraci[int(koji_user)-1][3]
+        postignuce2 = igraci[int(koji_user)-1][4]
+        postignuce3 = igraci[int(koji_user)-1][5]
+        postignuce4 = igraci[int(koji_user)-1][6]
+        postignuce5 = igraci[int(koji_user)-1][7]
+        postignuce6 = igraci[int(koji_user)-1][8]
+        ime = igraci[int(koji_user)-1][1]
+        main_menu()
+
 def main_menu():
-    global screen, text_font, text_font2, skinovi, skin_brojac
-    zmajko_pozadina = pygame.transform.scale(pygame.image.load("slike/pozadina_mainmenu.png"), (screen.get_width(), screen.get_height()))
-    skin1 = pygame.transform.scale(pygame.image.load("slike/zmaj.png"), (screen.get_width()*0.2265, screen.get_height()*0.365))
-    skin2 = pygame.transform.scale(pygame.image.load("slike/zmaj2.jpg"), (screen.get_width()*0.2265, screen.get_height()*0.365))
+    global screen, text_font, text_font2, skinovi, skin_brojac, igraci
+    zmajko_pozadina = pygame.transform.scale(pygame.image.load("pozadina_mainmenu.png"), (screen.get_width(), screen.get_height()))
+    skin1 = pygame.transform.scale(pygame.image.load("zmaj.png"), (screen.get_width()*0.2265, screen.get_height()*0.365))
+    skin2 = pygame.transform.scale(pygame.image.load("zmaj2.jpg"), (screen.get_width()*0.2265, screen.get_height()*0.365))
     skin_brojac = 0
     skinovi = [skin1, skin2]
-    arrow = pygame.transform.rotate(pygame.image.load("slike/arrow.png"),90)
+    arrow = pygame.transform.rotate(pygame.image.load("arrow.png"),90)
     strijelica1 = Button_Slika(screen.get_width()/8.5,screen.get_height()*0.82,arrow, 0.3)
     strijelica2 = Button_Slika(screen.get_width()/6,screen.get_height()*0.82,pygame.transform.flip(arrow, True, False), 0.3)
     run = True
@@ -185,11 +270,11 @@ def main_menu():
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
         #gumbovi na desnoj strani
-        IGRAJ_GUMB = Button("Kampanja", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "lightsalmon", "darksalmon", (screen.get_width()*0.8, screen.get_height()/2.5))
-        LEVEL_GUMB = Button("Nemoguć level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "lightsalmon", "darksalmon", (screen.get_width()*0.8, screen.get_height()/1.85))
-        ACHIEVEMENTS_GUMB = Button("Postignuća", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "lightsalmon", "darksalmon", (screen.get_width()*0.8, screen.get_height()/1.45))
-        QUIT_BUTTON = Button("Izađi", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "lightsalmon", "darksalmon", (screen.get_width()*0.8, screen.get_height()/1.175))
-        USERS_BUTTON = Button("Promijeni igrača", 50, "Blue", (screen.get_width()/5.5, screen.get_height()/20), "lightsalmon", "darksalmon", (screen.get_width()*0.172, screen.get_height()/3.2))
+        IGRAJ_GUMB = Button("Kampanja", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()/2.5))
+        LEVEL_GUMB = Button("Nemoguć level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()/1.85))
+        ACHIEVEMENTS_GUMB = Button("Postignuća", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()/1.45))
+        QUIT_BUTTON = Button("Izađi", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()/1.175))
+        USERS_BUTTON = Button("Promijeni igrača", 50, "Blue", (screen.get_width()/5.5, screen.get_height()/20), "#AE7A60", "darksalmon", (screen.get_width()*0.172, screen.get_height()/3.2))
         for gumb in [IGRAJ_GUMB, QUIT_BUTTON, LEVEL_GUMB, ACHIEVEMENTS_GUMB, USERS_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
@@ -213,6 +298,7 @@ def main_menu():
             draw_text(f"{ime}",text_font,(0,0,0),screen.get_width()/8,screen.get_height()/6)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                spremi_igru()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -222,8 +308,11 @@ def main_menu():
                 if USERS_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     user_birac()
                 if QUIT_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    spremi_igru()
                     pygame.quit()
                     sys.exit()
+                if ACHIEVEMENTS_GUMB.checkForCollision(MENU_MOUSE_POS):
+                    postignuca()
 
         pygame.display.update()
 
@@ -237,7 +326,7 @@ def pause_menu():
     while paused:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        pauzirano_logo = pygame.transform.scale(pygame.image.load("slike/pauzirano_logo.png"), (screen.get_width()/3, screen.get_height()/5))
+        pauzirano_logo = pygame.transform.scale(pygame.image.load("pauzirano_logo.png"), (screen.get_width()/3, screen.get_height()/5))
 
         PLAY_BUTTON = Button("Nastavi", 70, "White", (220, 120), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
         QUIT_BUTTON = Button("Izađi", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.5))
@@ -251,12 +340,14 @@ def pause_menu():
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                spremi_igru()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     paused = False
                 if QUIT_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    spremi_igru()
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.KEYDOWN:
@@ -280,7 +371,7 @@ def game_over():
         MAIN_BUTTON = Button("Glavni izbornik", 70, "White", (360, 120), "Light Grey", "dimgray", (screen.get_width()/2, screen.get_height()/1.5))
         QUIT_BUTTON = Button("Izađi", 70, "White", (360, 120), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.2))
         
-        kraj_logo = pygame.transform.scale(pygame.image.load("slike/kraj_logo.png"), (screen.get_width()/3, screen.get_height()/5))
+        kraj_logo = pygame.transform.scale(pygame.image.load("kraj_logo.png"), (screen.get_width()/3, screen.get_height()/5))
         screen.blit(kraj_logo, (screen.get_width()/3,screen.get_height()/10))
 
         for gumb in [PLAY_BUTTON,MAIN_BUTTON, QUIT_BUTTON]:
@@ -290,6 +381,7 @@ def game_over():
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                spremi_igru()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -297,6 +389,7 @@ def game_over():
                     run = False
                     igra()
                 if QUIT_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    spremi_igru()
                     pygame.quit()
                     sys.exit()
                 if MAIN_BUTTON.checkForCollision(MENU_MOUSE_POS):
@@ -305,23 +398,19 @@ def game_over():
 
         pygame.display.update()
 
-level_state = "Level 1-1"
-world_state = "1"
-
 def promijeni_level():
-    global level_state, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojAviona, brojMeteora, brojVjetra, vanzemaljac_state, brojVanzemaljca, world_state, pozadina, replay_state, odabrani_level
+    global level_state, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojAviona, brojMeteora, brojVjetra, vanzemaljac_state, brojVanzemaljca, pozadina, replay_state, odabrani_level
     if (level_state == "Level 1-1" and replay_state == False) or (odabrani_level == "Level 1-1" and replay_state == True): #leveli igrice
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world1_bg.jpg"), (screen.get_width(), screen.get_height()))
-        brojPtica = 20 
+        pozadina = pygame.transform.scale(pygame.image.load("world1_bg.jpg"), (screen.get_width(), screen.get_height()))
+        brojPtica = 20
         brzinaStvaranja = 2.5
         final_vrijeme = 20
         avioni_state=False
         meteori_state = False
         vjetar_state = False
         vanzemaljac_state = False
-        world_state = "1"
     elif (level_state == "Level 1-2" and replay_state == False) or (odabrani_level == "Level 1-2" and replay_state == True):
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world1_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world1_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 1.5
         final_vrijeme = 20
@@ -329,9 +418,8 @@ def promijeni_level():
         meteori_state = False
         vjetar_state = False
         vanzemaljac_state = False
-        world_state = "1"
     elif (level_state == "Level 2-1" and replay_state == False) or (odabrani_level == "Level 2-1" and replay_state == True):   
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world2_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world2_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 2
         final_vrijeme = 20
@@ -340,9 +428,8 @@ def promijeni_level():
         vjetar_state = False
         vanzemaljac_state = False
         brojAviona = 3
-        world_state = "2"
     elif (level_state == "Level 2-2" and replay_state == False) or (odabrani_level == "Level 2-2" and replay_state == True):
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world2_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world2_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 1.5
         final_vrijeme = 20
@@ -351,9 +438,8 @@ def promijeni_level():
         vjetar_state = False
         vanzemaljac_state = False
         brojAviona = 5
-        world_state = "2"
     elif (level_state == "Level 3-1" and replay_state == False) or (odabrani_level == "Level 3-1" and replay_state == True):
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world3_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world3_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 10
         brzinaStvaranja = 2.5
         final_vrijeme = 20
@@ -363,9 +449,8 @@ def promijeni_level():
         vanzemaljac_state = False
         brojAviona = 3
         brojMeteora = 3
-        world_state = "3"
     elif (level_state == "Level 3-2" and replay_state == False) or (odabrani_level == "Level 3-2" and replay_state == True):
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world3_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world3_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 15
         brzinaStvaranja = 2.5
         final_vrijeme = 20
@@ -375,9 +460,8 @@ def promijeni_level():
         vanzemaljac_state = False
         brojAviona = 4
         brojMeteora = 5
-        world_state = "3"
     elif (level_state == "Level 4-1" and replay_state == False) or (odabrani_level == "Level 4-1" and replay_state == True):
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world4_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world4_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 10
         brzinaStvaranja = 2
         final_vrijeme = 20
@@ -388,9 +472,8 @@ def promijeni_level():
         brojAviona = 3
         brojMeteora = 4
         brojVjetra = 1
-        world_state = "4"
     elif (level_state == "Level 4-2" and replay_state == False) or (odabrani_level == "Level 4-2" and replay_state == True):
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world4_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world4_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 10
         brzinaStvaranja = 2
         final_vrijeme = 20
@@ -401,9 +484,8 @@ def promijeni_level():
         brojAviona = 3
         brojMeteora = 5
         brojVjetra = 2
-        world_state = "4"
     elif (level_state == "Level 5-1" and replay_state == False) or (odabrani_level == "Level 5-1" and replay_state == True):
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world5_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 1.5
         final_vrijeme = 20
@@ -415,9 +497,8 @@ def promijeni_level():
         brojMeteora = 5
         brojVjetra = 1
         brojVanzemaljca = 3
-        world_state = "5"
     elif (level_state == "Level 5-2" and replay_state == False) or (odabrani_level == "Level 5-2" and replay_state == True):
-        pozadina = pygame.transform.scale(pygame.image.load("slike/world5_bg.jpg"), (screen.get_width(), screen.get_height()))
+        pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 1.5
         final_vrijeme = 20
@@ -429,34 +510,33 @@ def promijeni_level():
         brojMeteora = 5
         brojVjetra = 1
         brojVanzemaljca = 5
-        world_state = "5"
 
 def level_menu():
-    global screen, text_font, text_font2, world_state, level_state, replay_state, odabrani_level
-    pozadina_y = int(world_state)
-    arrow = pygame.image.load("slike/arrow.png")
+    global screen, text_font, text_font2, level_state, replay_state, odabrani_level
+    pozadina_y = int(level_state[-3])
+    arrow = pygame.image.load("arrow.png")
     run = True
     odabrani_level = level_state
     replay_state = False
     while run == True:
         if pozadina_y == 1: #pozicija leveli slike po svijetovima
-            leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd1.jpg"), (screen.get_width(), screen.get_height()))
+            leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd1.jpg"), (screen.get_width(), screen.get_height()))
             LEVEL1_GUMB = Button("1-1", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.73))
             LEVEL2_GUMB = Button("1-2", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.6825, screen.get_height()*0.345))
         elif pozadina_y == 2:
-            leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd2.jpg"), (screen.get_width(), screen.get_height()))
+            leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd2.jpg"), (screen.get_width(), screen.get_height()))
             LEVEL1_GUMB = Button("2-1", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.68, screen.get_height()*0.665))
             LEVEL2_GUMB = Button("2-2", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.285))
         elif pozadina_y == 3:
-            leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd3.jpg"), (screen.get_width(), screen.get_height()))
+            leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd3.jpg"), (screen.get_width(), screen.get_height()))
             LEVEL1_GUMB = Button("3-1", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.73))
             LEVEL2_GUMB = Button("3-2", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.6825, screen.get_height()*0.345))
         elif pozadina_y == 4:
-            leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd4.jpg"), (screen.get_width(), screen.get_height()))
+            leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd4.jpg"), (screen.get_width(), screen.get_height()))
             LEVEL1_GUMB = Button("4-1", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.6825, screen.get_height()*0.73))
             LEVEL2_GUMB = Button("4-2", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.345))
         elif pozadina_y == 5:
-            leveli_pozadina = pygame.transform.scale(pygame.image.load("slike/level_wrd5.jpg"), (screen.get_width(), screen.get_height()))
+            leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd5.jpg"), (screen.get_width(), screen.get_height()))
             LEVEL1_GUMB = Button("5-1", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.32, screen.get_height()*0.655))
             LEVEL2_GUMB = Button("5-2", 70, "White", (120, 120), "Light Grey", "Green", (screen.get_width()*0.69, screen.get_height()*0.28))
         screen.blit(leveli_pozadina, (0,0))
@@ -468,25 +548,28 @@ def level_menu():
         if dolje_arrow.draw(screen) and pozadina_y > 1:
             pozadina_y -=1
             time.sleep(0.2)
-        
+
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         IGRAJ_GUMB = Button("Nastavi", 70, "White", (220, 120), "Light Grey", "Green", (screen.get_width()*0.9, screen.get_height()*0.9))
         MAIN_GUMB = Button("Vrati se", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()*0.1, screen.get_height()*0.9))
         draw_text(f"{odabrani_level}",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/10)
 
-        if level_state[-1] == "2": #stvori drugi gumb
-            for gumb in [IGRAJ_GUMB, MAIN_GUMB, LEVEL1_GUMB, LEVEL2_GUMB]:
-                        if gumb.checkForCollision(MENU_MOUSE_POS):
-                            gumb.changeButtonColor()
-                        gumb.update(screen)
-        else: #stvori samo 1. gumb
-            for gumb in [IGRAJ_GUMB, MAIN_GUMB, LEVEL1_GUMB]:
-                if gumb.checkForCollision(MENU_MOUSE_POS):
-                    gumb.changeButtonColor()
-                gumb.update(screen)
+        for gumb in [IGRAJ_GUMB, MAIN_GUMB]:
+            if gumb.checkForCollision(MENU_MOUSE_POS):
+                gumb.changeButtonColor()
+            gumb.update(screen)
+
+        for gumb in [LEVEL1_GUMB, LEVEL2_GUMB]:
+            if int(gumb.text_input[0]) <= int(level_state[-3]):
+                if int(gumb.text_input[2]) <= int(level_state[-1]):
+                    if gumb.checkForCollision(MENU_MOUSE_POS):
+                        gumb.changeButtonColor()
+                    gumb.update(screen)
+            
     
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                spremi_igru()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -507,45 +590,45 @@ def level_menu():
         pygame.display.update()
 
 def igra():
-    global screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, world_state, pozadina, skin_brojac, skinovi, level_state
+    global screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, pozadina, skin_brojac, skinovi, level_state, postignuce1
     #slike
     zmaj_slika_og = skinovi[skin_brojac] #slika zmaja po skinu
-    protivnik_og = pygame.image.load("slike/birds.png")
-    sidebar = pygame.transform.scale(pygame.image.load("slike/sidebar.png"), (screen.get_width()*0.1651, screen.get_height()))
-    sidebar1 = pygame.transform.scale(pygame.image.load("slike/sidebar1.png"), (screen.get_width()*0.1651, screen.get_height()))
-    sidebar2 = pygame.transform.scale(pygame.image.load("slike/sidebar2.png"), (screen.get_width()*0.1651, screen.get_height()))
-    sidebar3 = pygame.transform.scale(pygame.image.load("slike/sidebar3.png"), (screen.get_width()*0.1651, screen.get_height()))
-    sidebar4 = pygame.transform.scale(pygame.image.load("slike/sidebar4.png"), (screen.get_width()*0.1651, screen.get_height()))
+    protivnik_og = pygame.image.load("birds.png")
+    sidebar = pygame.transform.scale(pygame.image.load("sidebar.png"), (screen.get_width()*0.1651, screen.get_height()))
+    sidebar1 = pygame.transform.scale(pygame.image.load("sidebar1.png"), (screen.get_width()*0.1651, screen.get_height()))
+    sidebar2 = pygame.transform.scale(pygame.image.load("sidebar2.png"), (screen.get_width()*0.1651, screen.get_height()))
+    sidebar3 = pygame.transform.scale(pygame.image.load("sidebar3.png"), (screen.get_width()*0.1651, screen.get_height()))
+    sidebar4 = pygame.transform.scale(pygame.image.load("sidebar4.png"), (screen.get_width()*0.1651, screen.get_height()))
     zmaj_menu = pygame.transform.scale(zmaj_slika_og, (screen.get_width()*0.045, screen.get_height()*0.085))
-    srce = pygame.transform.scale(pygame.image.load("slike/srce.png"), (screen.get_width()*0.05, screen.get_height()*0.08))
-    fireball_og = pygame.image.load("slike/fireball.png")
+    srce = pygame.transform.scale(pygame.image.load("srce.png"), (screen.get_width()*0.05, screen.get_height()*0.08))
+    fireball_og = pygame.image.load("fireball.png")
     fireball_menu = pygame.transform.scale(fireball_og, (screen.get_width()*0.055, screen.get_height()*0.095))
-    avion_og = pygame.image.load("slike/avion.png")
-    meteor_og = pygame.image.load("slike/meteor.png")
-    vjetar_og = pygame.transform.flip(pygame.image.load("slike/vjetar.png"), True, False)
-    vanzemaljac_og = pygame.image.load("slike/alien.png")
-    vanzemaljac_pucanj_og = pygame.image.load("slike/purple.png")
-    powerup2_og = pygame.image.load("slike/blue.png")
+    avion_og = pygame.image.load("avion.png")
+    meteor_og = pygame.image.load("meteor.png")
+    vjetar_og = pygame.transform.flip(pygame.image.load("vjetar.png"), True, False)
+    vanzemaljac_og = pygame.image.load("alien.png")
+    vanzemaljac_pucanj_og = pygame.image.load("purple.png")
+    powerup2_og = pygame.image.load("blue.png")
     powerup2_menu = pygame.transform.scale(powerup2_og, (screen.get_width()*0.055, screen.get_height()*0.095))
-    powerup3_og = pygame.image.load("slike/powerup3.png")
+    powerup3_og = pygame.image.load("powerup3.png")
     powerup3_menu = pygame.transform.scale(powerup3_og, (screen.get_width()*0.055, screen.get_height()*0.095))
-    powerup4_menu = pygame.transform.scale(pygame.image.load("slike/3balls.png"), (screen.get_width()*0.065, screen.get_height()*0.1))
+    powerup4_menu = pygame.transform.scale(pygame.image.load("3balls.png"), (screen.get_width()*0.065, screen.get_height()*0.1))
 
     powerups = []
     #aktivacija powerupova određeni po svijetu
-    if world_state == "1":
+    if level_state[-3] == "1": #koji svijet
         powerups = []
         power_birac = -1
-    if world_state == "2": 
+    if level_state[-3] == "2": 
         powerups = ["vatra"]
         power_birac = 0
-    elif world_state == "3":
+    elif level_state[-3] == "3":
         powerups = ["vatra", "plava"]
         power_birac = 0
-    elif world_state == "4":
+    elif level_state[-3] == "4":
         powerups = ["vatra", "plava", "riganje"]
         power_birac = 0
-    elif world_state == "5":
+    elif level_state[-3] == "5":
         powerups = ["vatra", "plava", "riganje", "ciljanje"]
         power_birac = 0
 
@@ -625,22 +708,41 @@ def igra():
     power4_x = [0,0,0]
     power4_y = [0,0,0]
 
+    #PRVI POWERUP
+    power1_w = zmaj_w/4
+    power1_h = zmaj_h/4
+    pucanjPomak = -1*(screen.get_height() / 60)
+
+    #DRUGI POWERUP
+    power2_w = zmaj_w/2
+    power2_h = zmaj_h/2
+    pucanjPomak = -1*(screen.get_height() / 60)
+
+    #TRECI POWERUP
+    power3_w = zmaj_w*1.5
+    power3_h = zmaj_h*1.5
+    pucanjPomak = -1*(screen.get_height() / 60)
+
+    #CETVRTI POWERUP
+    power4_w = zmaj_w/3.5
+    power4_h = zmaj_h/3.5
+
     #nova slika zmaja
     zmaj_slika = pygame.transform.scale(zmaj_slika_og, (zmaj_w, zmaj_h))
 
-    def stvoriProtivnike():
+    def stvoriProtivnike(): 
         for i in range(brojPtica): #stvaranje ptica
             #noviW i noviH
             noviWiH = zmaj_w/random.uniform(zmaj_w/2.5, zmaj_w/2)
             ProtivnikW.append(zmaj_w/noviWiH)
             ProtivnikH.append(zmaj_h/noviWiH)
             #noviX
-            noviX = random.randint(0, int(screen.get_width()*0.834895-ProtivnikW[i])) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
+            noviX = random.uniform(ProtivnikW[i], int(screen.get_width()*0.834895-ProtivnikW[i])) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
             if i == 0: #za prvog protivnika uzima se bilo koji x
                 ProtivnikX.append(noviX)
             else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
                 while abs(ProtivnikX[i-1]-noviX) < ProtivnikW[i]:
-                    noviX = random.randint(0, int(screen.get_width()*0.834895-ProtivnikW[i]))
+                    noviX = random.uniform(ProtivnikW[i], int(screen.get_width()*0.834895-ProtivnikW[i]))
                 else:
                     ProtivnikX.append(noviX)
             #noviY
@@ -655,127 +757,124 @@ def igra():
             else:
                 ProtivnikSlika.append(slikaProtivnika)
             #brzina Protivnika
-            protivnikPomakY.append(random.uniform(screen.get_height() / 80,screen.get_height() / 50))
+            protivnikPomakY.append(random.uniform(screen.get_height() / 75,screen.get_height() / 55))
 
-        if avioni_state == True: #stvaranje aviona
-            for i in range(brojAviona):
-                #noviW i noviH
-                AvionW.append(random.uniform(zmaj_w*1.9, zmaj_w*1.6))
-                AvionH.append(random.uniform(zmaj_h*0.45, zmaj_h*0.35))
-                #noviY
-                avionNoviY = random.uniform(screen.get_height()/4, screen.get_height()*0.8) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
-                if i == 0: #za prvog protivnika uzima se bilo koji x
+    def stvoriAvione():#stvaranje aviona
+        for i in range(brojAviona):
+            #noviW i noviH
+            AvionW.append(random.uniform(zmaj_w*1.9, zmaj_w*1.6))
+            AvionH.append(random.uniform(zmaj_h*0.45, zmaj_h*0.35))
+            #noviY
+            avionNoviY = random.uniform(screen.get_height()/4, screen.get_height()*0.8) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
+            if i == 0: #za prvog protivnika uzima se bilo koji x
+                AvionY.append(avionNoviY)
+            else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
+                while abs(AvionY[i-1]-avionNoviY) < AvionH[i]:
+                    avionNoviY = random.uniform(screen.get_height()/4, screen.get_height()*0.8)
+                else:
                     AvionY.append(avionNoviY)
-                else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
-                    while abs(AvionY[i-1]-avionNoviY) < AvionH[i]:
-                        avionNoviY = random.uniform(screen.get_height()/4, screen.get_height()*0.8)
-                    else:
-                        AvionY.append(avionNoviY)
-                #noviX
-                if i == 0: #uzima se određeni y na kome će se stvoriti 1. neprijatelj
-                    AvionX.append(-AvionW[i])
-                else: #ostali neprijatelji uzimaju prošli y i stvaraju se za istu visinu višu od prošloga
-                    AvionX.append(AvionX[i-1]-AvionW[i]*brzinaStvaranja*2)
-                #slika Protivnika 
-                AvionSlika.append(pygame.transform.scale(avion_og, (AvionW[i], AvionH[i])))
-                #brzina Protivnika
-                AvionPomakX.append(random.uniform(screen.get_width() / 120,screen.get_width() / 80))
+            #noviX
+            if i == 0: #uzima se određeni y na kome će se stvoriti 1. neprijatelj
+                AvionX.append(-AvionW[i])
+            else: #ostali neprijatelji uzimaju prošli y i stvaraju se za istu visinu višu od prošloga
+                AvionX.append(AvionX[i-1]-AvionW[i]*brzinaStvaranja*2)
+            #slika Protivnika 
+            AvionSlika.append(pygame.transform.scale(avion_og, (AvionW[i], AvionH[i])))
+            #brzina Protivnika
+            AvionPomakX.append(random.uniform(screen.get_width() / 120,screen.get_width() / 80))
 
-        if meteori_state == True:
-            for i in range(brojMeteora): #stvaranje meteora
-                #noviW i noviH
-                meteoriNoviWiH = zmaj_w/random.uniform(zmaj_w/2.5, zmaj_w/2)
-                MeteorW.append(zmaj_w/meteoriNoviWiH)
-                MeteorH.append(zmaj_h/meteoriNoviWiH)
-                #noviX
-                meteoriNoviX = random.uniform(0, screen.get_width()*0.834895-MeteorW[i]) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
-                if i == 0: #za prvog protivnika uzima se bilo koji x
+    def stvoriMeteore():
+        for i in range(brojMeteora): #stvaranje meteora
+            #noviW i noviH
+            meteoriNoviWiH = zmaj_w/random.uniform(zmaj_w/2.5, zmaj_w/2)
+            MeteorW.append(zmaj_w/meteoriNoviWiH)
+            MeteorH.append(zmaj_h/meteoriNoviWiH)
+            #noviX
+            meteoriNoviX = random.uniform(0, screen.get_width()*0.834895-MeteorW[i]) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
+            if i == 0: #za prvog protivnika uzima se bilo koji x
+                MeteorX.append(meteoriNoviX)
+            else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
+                while abs(MeteorX[i-1]-meteoriNoviX) < MeteorW[i]:
+                    meteoriNoviX = random.uniform(0, screen.get_width()*0.834895-MeteorW[i])
+                else:
                     MeteorX.append(meteoriNoviX)
-                else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
-                    while abs(MeteorX[i-1]-meteoriNoviX) < MeteorW[i]:
-                        meteoriNoviX = random.uniform(0, screen.get_width()*0.834895-MeteorW[i])
-                    else:
-                        MeteorX.append(meteoriNoviX)
-                #noviY
-                if i == 0: #uzima se određeni y na kome će se stvoriti 1. neprijatelj
-                    MeteorY.append(-MeteorH[i])
-                else: #ostali neprijatelji uzimaju prošli y i stvaraju se za istu visinu višu od prošloga
-                    MeteorY.append(MeteorY[i-1]-MeteorH[i]*brzinaStvaranja*2)
-                #slika Protivnika
-                MeteorSlika.append(pygame.transform.scale(meteor_og, (MeteorW[i], MeteorH[i])))
-                #brzina Protivnika
-                MeteorPomakX.append(random.uniform(screen.get_width() / 110,screen.get_width() / 80))
-                MeteorPomakY.append(random.uniform(screen.get_height() / 70,screen.get_height() / 50))
+            #noviY
+            if i == 0: #uzima se određeni y na kome će se stvoriti 1. neprijatelj
+                MeteorY.append(-MeteorH[i])
+            else: #ostali neprijatelji uzimaju prošli y i stvaraju se za istu visinu višu od prošloga
+                MeteorY.append(MeteorY[i-1]-MeteorH[i]*brzinaStvaranja*2)
+            #slika Protivnika
+            MeteorSlika.append(pygame.transform.scale(meteor_og, (MeteorW[i], MeteorH[i])))
+            #brzina Protivnika
+            MeteorPomakX.append(random.uniform(screen.get_width() / 110,screen.get_width() / 80))
+            MeteorPomakY.append(random.uniform(screen.get_height() / 70,screen.get_height() / 50))
 
-        if vjetar_state == True:
-            for i in range(brojVjetra):
-                #noviW i noviH
-                VjetarW.append(random.uniform(zmaj_w*1.5, zmaj_w*1))
-                VjetarH.append(random.uniform(zmaj_h*0.8, zmaj_h*0.6))
-                #noviY
-                vjetarNoviY = random.uniform(screen.get_height()/2.5, screen.get_height()*0.8) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
-                if i == 0: #za prvog protivnika uzima se bilo koji x
+    def stvoriVjetar():
+        for i in range(brojVjetra):
+            #noviW i noviH
+            VjetarW.append(random.uniform(zmaj_w*1.5, zmaj_w*1))
+            VjetarH.append(random.uniform(zmaj_h*0.8, zmaj_h*0.6))
+            #noviY
+            vjetarNoviY = random.uniform(screen.get_height()/2.5, screen.get_height()*0.8) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
+            if i == 0: #za prvog protivnika uzima se bilo koji x
+                VjetarY.append(vjetarNoviY)
+            else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
+                while abs(VjetarY[i-1]-vjetarNoviY) < VjetarH[i]:
+                    vjetarNoviY = random.uniform(0, screen.get_height()/2)
+                else:
                     VjetarY.append(vjetarNoviY)
-                else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
-                    while abs(VjetarY[i-1]-vjetarNoviY) < VjetarH[i]:
-                        vjetarNoviY = random.uniform(0, screen.get_height()/2)
-                    else:
-                        VjetarY.append(vjetarNoviY)
-                #noviX
-                if i == 0: #uzima se određeni y na kome će se stvoriti 1. neprijatelj
-                    VjetarX.append(screen.get_width()+VjetarW[i]*brzinaStvaranja)
-                else: #ostali neprijatelji uzimaju prošli y i stvaraju se za istu visinu višu od prošloga
-                    VjetarX.append(VjetarX[i-1]+VjetarW[i])
-                #slika Protivnika
-                VjetarSlika.append(pygame.transform.scale(vjetar_og, (VjetarW[i], VjetarH[i])))
-                #brzina Protivnika
-                VjetarPomakX.append(random.uniform(screen.get_width() / 120,screen.get_width() / 80))
+            #noviX
+            if i == 0: #uzima se određeni y na kome će se stvoriti 1. neprijatelj
+                VjetarX.append(screen.get_width()+VjetarW[i]*brzinaStvaranja)
+            else: #ostali neprijatelji uzimaju prošli y i stvaraju se za istu visinu višu od prošloga
+                VjetarX.append(VjetarX[i-1]+VjetarW[i])
+            #slika Protivnika
+            VjetarSlika.append(pygame.transform.scale(vjetar_og, (VjetarW[i], VjetarH[i])))
+            #brzina Protivnika
+            VjetarPomakX.append(random.uniform(screen.get_width() / 120,screen.get_width() / 80))
         
-        if vanzemaljac_state == True:
-            for i in range(brojVanzemaljca): #stvaranje meteora
-                #noviW i noviH
-                vanzemaljacNoviWiH = zmaj_w/random.uniform(zmaj_w, zmaj_w/1.2)
-                VanzemaljacW.append(zmaj_w/vanzemaljacNoviWiH)
-                VanzemaljacH.append(zmaj_h/vanzemaljacNoviWiH)
-                #noviX
-                vanzemaljacNoviX = random.uniform(0, screen.get_width()*0.834895-VanzemaljacW[i]) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
-                if i == 0: #za prvog protivnika uzima se bilo koji x
+    def stvoriVanzemaljca():
+        for i in range(brojVanzemaljca): #stvaranje meteora
+            #noviW i noviH
+            vanzemaljacNoviWiH = zmaj_w/random.uniform(zmaj_w, zmaj_w/1.2)
+            VanzemaljacW.append(zmaj_w/vanzemaljacNoviWiH)
+            VanzemaljacH.append(zmaj_h/vanzemaljacNoviWiH)
+            #noviX
+            vanzemaljacNoviX = random.uniform(0, screen.get_width()*0.834895-VanzemaljacW[i]) #stvaranje x pozicije protivnika koja može bit od početka do kraja screena
+            if i == 0: #za prvog protivnika uzima se bilo koji x
+                VanzemaljacX.append(vanzemaljacNoviX)
+            else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
+                while abs(VanzemaljacX[i-1]-vanzemaljacNoviX) < VanzemaljacW[i]:
+                    vanzemaljacNoviX = random.uniform(0, screen.get_width()*0.834895-VanzemaljacW[i])
+                else:
                     VanzemaljacX.append(vanzemaljacNoviX)
-                else: #za ostale protivnike se uzima bilo koji x, ali ako je x u blizini prijašnjeg neprijatelja, bira se novi x. Tako neće doći do preklapanja protivnika
-                    while abs(VanzemaljacX[i-1]-vanzemaljacNoviX) < VanzemaljacW[i]:
-                        vanzemaljacNoviX = random.uniform(0, screen.get_width()*0.834895-VanzemaljacW[i])
-                    else:
-                        VanzemaljacX.append(vanzemaljacNoviX)
-                #noviY
-                if i == 0: #uzima se određeni y na kome će se stvoriti 1. neprijatelj
-                    VanzemaljacY.append(-VanzemaljacH[i])
-                else: #ostali neprijatelji uzimaju prošli y i stvaraju se za istu visinu višu od prošloga
-                    VanzemaljacY.append(VanzemaljacY[i-1]-VanzemaljacH[i]*brzinaStvaranja*2)
-                #slika Protivnika
-                VanzemaljacSlika.append(pygame.transform.scale(vanzemaljac_og, (VanzemaljacW[i], VanzemaljacH[i])))
-                #brzina Protivnika
-                VanzemaljacPomakX.append(random.uniform(screen.get_width() / 200,screen.get_width() / 180))
-                VanzemaljacPomakY.append(random.uniform(screen.get_height() / 150,screen.get_height() / 130))
-            
-                VanzemaljacPucanjX.append(VanzemaljacX[i]+VanzemaljacW[i]/2)
-                VanzemaljacPucanjY.append(VanzemaljacY[i]+VanzemaljacH[i]/2)
-                VanzemaljacPucanjPomakY.append(random.uniform(screen.get_height() / 100,screen.get_height() / 80))
-                vanzemaljac_pucanje.append(False)
+            #noviY
+            if i == 0: #uzima se određeni y na kome će se stvoriti 1. neprijatelj
+                VanzemaljacY.append(-VanzemaljacH[i])
+            else: #ostali neprijatelji uzimaju prošli y i stvaraju se za istu visinu višu od prošloga
+                VanzemaljacY.append(VanzemaljacY[i-1]-VanzemaljacH[i]*brzinaStvaranja*2)
+            #slika Protivnika
+            VanzemaljacSlika.append(pygame.transform.scale(vanzemaljac_og, (VanzemaljacW[i], VanzemaljacH[i])))
+            #brzina Protivnika
+            VanzemaljacPomakX.append(random.uniform(screen.get_width() / 200,screen.get_width() / 180))
+            VanzemaljacPomakY.append(random.uniform(screen.get_height() / 150,screen.get_height() / 130))
+        
+            VanzemaljacPucanjX.append(VanzemaljacX[i]+VanzemaljacW[i]/2)
+            VanzemaljacPucanjY.append(VanzemaljacY[i]+VanzemaljacH[i]/2)
+            VanzemaljacPucanjPomakY.append(random.uniform(screen.get_height() / 100,screen.get_height() / 80))
+            vanzemaljac_pucanje.append(False)
                 
     def vratiProtivnika(i):
-        if min(ProtivnikY) >= 0: #vraćanje ptica
-            ProtivnikY[i] = 0 - ProtivnikH[i]*brzinaStvaranja #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
+        ProtivnikY[i] = min(ProtivnikY) - ProtivnikH[i]*brzinaStvaranja #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
+        noviX = random.randint(0, int(screen.get_width()*0.834895-ProtivnikW[i]))
+        while abs(ProtivnikX[i-1]-noviX) < ProtivnikW[i]:
             noviX = random.randint(0, int(screen.get_width()*0.834895-ProtivnikW[i]))
-            while abs(ProtivnikX[i-1]-noviX) < ProtivnikW[i]:
-                noviX = random.randint(0, int(screen.get_width()*0.834895-ProtivnikW[i]))
-            else:
-                ProtivnikX[i] = noviX
         else:
-            ProtivnikY[i] = screen.get_height()
+            ProtivnikX[i] = noviX
 
     def vratiAvion(i):
         if min(AvionX) >= 0:
-            AvionX[i] = 0 - AvionW[i]*brzinaStvaranja #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
+            AvionX[i] = min(AvionX) - AvionW[i]*brzinaStvaranja #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
             avionNoviY = random.uniform(screen.get_height()/4, screen.get_height()*0.8)
             while abs(AvionY[i-1]-avionNoviY) < AvionH[i]:
                 avionNoviY = random.uniform(screen.get_height()/4, screen.get_height()*0.8)
@@ -783,7 +882,7 @@ def igra():
                 AvionY[i] = avionNoviY
         else:
             AvionX[i] = screen.get_width()
-    
+
     def vratiMeteor(i):
         if min(MeteorY) >= 0: #vraćanje ptica
             MeteorY[i] = 0 - MeteorH[i]*brzinaStvaranja #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
@@ -794,7 +893,7 @@ def igra():
                 MeteorX[i] = meteoriNoviX
         else:
             MeteorY[i] = screen.get_height()
-    
+
     def vratiVjetar(i):
         if min(VjetarX) < screen.get_width()*0.834895:
             VjetarX[i] = screen.get_width() + VjetarW[i] #vraća protivnika natrag gore (isti kod kao i kod spawnanja)
@@ -815,28 +914,16 @@ def igra():
         else:
             VanzemaljacX[i] = vanzemaljacNoviX
 
-    def igrac(x,y):
-        screen.blit(zmaj_slika, (x, y))
-    
-    def protivnik(x,y, i):
-        screen.blit(ProtivnikSlika[i], (x, y))
-
-    def avion(x,y, i):
-        screen.blit(AvionSlika[i], (x, y))
-    
-    def meteor(x,y, i):
-        screen.blit(MeteorSlika[i], (x, y))
-    
-    def vjetar(x,y,i):
-        screen.blit(VjetarSlika[i], (x, y))
-
-    def vanzemaljac(x,y,i):
-        screen.blit(VanzemaljacSlika[i], (x, y))
-    
-    def vanzemaljacPucanj(x,y, i):
-        screen.blit(pygame.transform.scale(vanzemaljac_pucanj_og, (power1_w, power1_h*1.5)), (x, y))
-
-    stvoriProtivnike() #stvaranje neprijatelja
+    #stvaranje neprijatelja
+    stvoriProtivnike() 
+    if avioni_state == True:
+        stvoriAvione()
+    if meteori_state == True:
+        stvoriMeteore()
+    if vjetar_state == True:
+        stvoriVjetar()
+    if vanzemaljac_state == True:
+        stvoriVanzemaljca()
 
     run = True
     while run:
@@ -844,6 +931,7 @@ def igra():
         clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                spremi_igru()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
@@ -899,11 +987,6 @@ def igra():
 
         progress = vrijeme/final_vrijeme
 
-        #PRVI POWERUP
-        power1_w = zmaj_w/4
-        power1_h = zmaj_h/4
-        pucanjPomak = -1*(screen.get_height() / 60)
-
         #pomak pucnja
         if ispaljeno1 == True:
             power1_y += pucanjPomak
@@ -915,11 +998,6 @@ def igra():
         #ograničenje pucnja
         if power1_y < 0:
             ispaljeno1 = False
-
-        #DRUGI POWERUP
-        power2_w = zmaj_w/2
-        power2_h = zmaj_h/2
-        pucanjPomak = -1*(screen.get_height() / 60)
 
         #pomak pucnja
         if ispaljeno2 == True:
@@ -933,11 +1011,6 @@ def igra():
         if power2_y < 0:
             ispaljeno2 = False 
 
-        #TRECI POWERUP
-        power3_w = zmaj_w*1.5
-        power3_h = zmaj_h*1.5
-        pucanjPomak = -1*(screen.get_height() / 60)
-        
         #pomak pucnja
         if ispaljeno3 == True:
             if vrijeme - timer_cooldown3 < 6:
@@ -953,10 +1026,6 @@ def igra():
             power3_y = screen.get_height() + power2_h*2
             power3_x = -power2_w*2
         
-        #CETVRTI POWERUP
-        power4_w = zmaj_w/3.5
-        power4_h = zmaj_h/3.5
-
         #pomak pucnja
         if ispaljeno4 == True:
             for i in range(3):
@@ -1012,11 +1081,10 @@ def igra():
         
         for i in range(brojPtica): 
             ProtivnikY[i] += protivnikPomakY[i] #micanje protivnika
-            protivnik(ProtivnikX[i],ProtivnikY[i], i) #crtanje protivnika
+            screen.blit(ProtivnikSlika[i], (ProtivnikX[i],ProtivnikY[i])) #crtanje protivnika
 
             if ProtivnikY[i] > screen.get_height(): #respawnanje protivnika
-                if vrijeme < final_vrijeme-3: #ograničenje da se ne respawnaju zauvijek
-                    vratiProtivnika(i)
+                vratiProtivnika(i)
                 
             if pygame.Rect(ProtivnikX[i], ProtivnikY[i], ProtivnikW[i], ProtivnikH[i]).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)) and isHit == False: #collision protivnika
                 život -= 1
@@ -1043,11 +1111,10 @@ def igra():
         if avioni_state == True:
             for i in range(brojAviona): 
                 AvionX[i] += AvionPomakX[i] #micanje protivnika
-                avion(AvionX[i],AvionY[i], i) #crtanje protivnika
+                screen.blit(AvionSlika[i], (AvionX[i],AvionY[i])) #crtanje protivnika
 
                 if AvionX[i] > screen.get_width()*0.834895:
-                    if vrijeme < final_vrijeme-3: #ograničenje da se ne respawnaju zauvijek
-                        vratiAvion(i)
+                    vratiAvion(i)
                     
                 if pygame.Rect(AvionX[i], AvionY[i], AvionW[i], AvionH[i]).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)) and isHit == False: #collision protivnika
                     život -= 1
@@ -1075,11 +1142,10 @@ def igra():
             for i in range(brojMeteora): 
                 MeteorY[i] += MeteorPomakY[i] #micanje protivnika
                 MeteorX[i] += MeteorPomakX[i]
-                meteor(MeteorX[i],MeteorY[i], i) #crtanje protivnika
+                screen.blit(MeteorSlika[i], (MeteorX[i],MeteorY[i])) #crtanje protivnika
 
                 if MeteorY[i] > screen.get_height(): #respawnanje protivnika
-                    if vrijeme < final_vrijeme-3: #ograničenje da se ne respawnaju zauvijek
-                        vratiMeteor(i)
+                    vratiMeteor(i)
                 
                 if MeteorX[i] > screen.get_width()*0.834895-MeteorW[i] or MeteorX[i] <= 0: #ako meteor dira granice, odbija se u drugu stranu
                     MeteorPomakX[i] = -1*MeteorPomakX[i]
@@ -1110,11 +1176,10 @@ def igra():
         if vjetar_state == True:
             for i in range(brojVjetra): 
                 VjetarX[i] -= VjetarPomakX[i] #micanje protivnika
-                vjetar(VjetarX[i],VjetarY[i], i) #crtanje protivnika
+                screen.blit(VjetarSlika[i], (VjetarX[i],VjetarY[i])) #crtanje protivnika
 
                 if VjetarX[i] < -VjetarW[i]:
-                    if vrijeme < final_vrijeme-3: #ograničenje da se ne respawnaju zauvijek
-                        vratiVjetar(i)
+                    vratiVjetar(i)
                     
                 if pygame.Rect(VjetarX[i], VjetarY[i], VjetarW[i], VjetarH[i]).colliderect(pygame.Rect(zmaj_x,zmaj_y,zmaj_w,zmaj_h)): #collision protivnika
                     zmaj_x -= VjetarPomakX[i]
@@ -1126,7 +1191,7 @@ def igra():
         if vanzemaljac_state == True:
             for i in range(brojVanzemaljca): 
                 VanzemaljacY[i] += VanzemaljacPomakY[i] #micanje protivnika
-                vanzemaljac(VanzemaljacX[i],VanzemaljacY[i], i) #crtanje protivnika
+                screen.blit(VanzemaljacSlika[i], (VanzemaljacX[i],VanzemaljacY[i])) #crtanje protivnika
 
                 if VanzemaljacY[i] >= screen.get_height()/5: #respawnanje protivnika
                     VanzemaljacPomakY[i] = 0
@@ -1165,7 +1230,7 @@ def igra():
 
                 if vanzemaljac_pucanje[i] == True:
                     VanzemaljacPucanjY[i] += VanzemaljacPucanjPomakY[i]
-                    vanzemaljacPucanj(VanzemaljacPucanjX[i], VanzemaljacPucanjY[i], i)
+                    screen.blit(pygame.transform.scale(vanzemaljac_pucanj_og, (power1_w, power1_h*1.5)), (VanzemaljacPucanjX[i], VanzemaljacPucanjY[i])) #crtanje pucnja
                 else:
                     VanzemaljacPucanjX[i] = VanzemaljacX[i] + VanzemaljacW[i]/2
                     VanzemaljacPucanjY[i] = VanzemaljacY[i] + VanzemaljacH[i]/2
@@ -1212,7 +1277,7 @@ def igra():
                 draw_text(f"{round(vrijeme - timer1,2)}s",text_font,(0,0,0),screen.get_width()/2,screen.get_height()/2)
 
         #crtanje zmaja
-        igrac(zmaj_x,zmaj_y)
+        screen.blit(zmaj_slika, (zmaj_x, zmaj_y))
         #vrijeme
         t2 = time.perf_counter()
         vrijeme =round(t2-t1,1)
@@ -1255,7 +1320,7 @@ def igra():
             screen.blit(srce,(screen.get_width()*0.84375+x*i,screen.get_height()*0.145))
 
         #slike powerupova u sidebaru
-        if world_state != "1":
+        if int(level_state[-3]) > 1:
             if vrijeme - timer_cooldown1 < cooldown1: #crtanje powerupa u sidebaru
                 draw_text(f"{round((vrijeme - timer_cooldown1),1)}s",text_font,(0,0,0),screen.get_width()*0.85,screen.get_height()*0.28)
                 fireball_menu.set_alpha(150)
@@ -1264,7 +1329,7 @@ def igra():
                 fireball_menu.set_alpha(256)
                 screen.blit(fireball_menu,(screen.get_width()*0.847,screen.get_height()*0.27))
         
-        if world_state != "1" and world_state != "2":
+        if int(level_state[-3]) > 2:
             if vrijeme - timer_cooldown2 < cooldown2: #crtanje powerupa u sidebaru
                 draw_text(f"{round((vrijeme - timer_cooldown2),1)}s",text_font,(0,0,0),screen.get_width()*0.85,screen.get_height()*0.45)
                 powerup2_menu.set_alpha(150)
@@ -1273,7 +1338,7 @@ def igra():
                 powerup2_menu.set_alpha(256)
                 screen.blit(powerup2_menu,(screen.get_width()*0.847,screen.get_height()*0.45))
         
-        if world_state == "4" or world_state == "5":
+        if int(level_state[-3]) > 3:
             if vrijeme - timer_cooldown3 < cooldown3: #crtanje powerupa u sidebaru
                 draw_text(f"{round((vrijeme - timer_cooldown3),1)}s",text_font,(0,0,0),screen.get_width()*0.85,screen.get_height()*0.62)
                 powerup3_menu.set_alpha(150)
@@ -1282,7 +1347,7 @@ def igra():
                 powerup3_menu.set_alpha(256)
                 screen.blit(powerup3_menu,(screen.get_width()*0.847,screen.get_height()*0.62))
             
-        if world_state == "5":
+        if int(level_state[-3]) > 4:
             if vrijeme - timer_cooldown4 < cooldown4: #crtanje powerupa u sidebaru
                 draw_text(f"{round((vrijeme - timer_cooldown4),1)}s",text_font,(0,0,0),screen.get_width()*0.85,screen.get_height()*0.79)
                 powerup4_menu.set_alpha(150)
@@ -1294,7 +1359,10 @@ def igra():
         x = - screen.get_height()*0.52
         screen.blit(zmaj_menu, (screen.get_width()*0.93,screen.get_height()*0.816+(x*progress)))
         
-        if progress == 1:
+        if progress == 1: #runda je gotova
+            if život == 2: #nisi pogođen
+                postignuce1 = "da"
+                
             run = False
             if replay_state == False:
                 if level_state == "Level 1-1": #mijenjanje levela
@@ -1322,6 +1390,9 @@ def igra():
             game_over()
         
         pygame.display.update()
+
+if __name__ == "__main__":
+    main()
 
 if __name__ == "__main__":
     main()
