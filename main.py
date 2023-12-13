@@ -218,23 +218,28 @@ def player_name():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if POTVRDA_BUTTON.checkForCollision(MENU_MOUSE_POS) and len(ime) > 1:
-                    with open("igraci.txt", "r") as datoteka:
-                        a = datoteka.read()
-                    igraci = a.split("\n")
-                    for i, clan in enumerate(igraci):
-                        igraci[i] = clan.split("/")
-                    igraci[int(koji_user)-1][1] = ime
-                    level_state = igraci[int(koji_user)-1][2]
-                    postignuce1 = igraci[int(koji_user)-1][3]
-                    postignuce2 = igraci[int(koji_user)-1][4]
-                    postignuce3 = igraci[int(koji_user)-1][5]
-                    postignuce4 = igraci[int(koji_user)-1][6]
-                    postignuce5 = igraci[int(koji_user)-1][7]
-                    postignuce6 = igraci[int(koji_user)-1][8]
-                    uništeniProtivnici = int(igraci[int(koji_user)-1][9])
-                    run = False
-                    main_menu()
+                if POTVRDA_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    if len(ime) > 0 and len(ime) < 10:
+                        with open("igraci.txt", "r") as datoteka:
+                            a = datoteka.read()
+                        igraci = a.split("\n")
+                        for i, clan in enumerate(igraci):
+                            igraci[i] = clan.split("/")
+                        igraci[int(koji_user)-1][1] = ime
+                        level_state = igraci[int(koji_user)-1][2]
+                        postignuce1 = igraci[int(koji_user)-1][3]
+                        postignuce2 = igraci[int(koji_user)-1][4]
+                        postignuce3 = igraci[int(koji_user)-1][5]
+                        postignuce4 = igraci[int(koji_user)-1][6]
+                        postignuce5 = igraci[int(koji_user)-1][7]
+                        postignuce6 = igraci[int(koji_user)-1][8]
+                        uništeniProtivnici = int(igraci[int(koji_user)-1][9])
+                        run = False
+                        main_menu()
+                    else:
+                        draw_text("Upiši ime duljine 1-9 slova",font,"black",screen.get_width()/3,screen.get_height()*0.8)
+                        pygame.display.update()
+                        time.sleep(1.5)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_BACKSPACE:
                     ime = ime[:-1]
@@ -424,7 +429,8 @@ def tutorial():
         pygame.display.update()
 
 def pause_menu():
-    global screen, text_font
+    global screen, text_font, tp1, tp2, tp
+    tp1 = time.perf_counter()
     paused = True
     pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
     pozadina.fill("Black")
@@ -432,9 +438,7 @@ def pause_menu():
     screen.blit(pozadina, (0,0))
     while paused:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
-
         pauzirano_logo = pygame.transform.scale(pygame.image.load("pauzirano_logo.png"), (screen.get_width()/3, screen.get_height()/5))
-
         PLAY_BUTTON = Button("Nastavi", 70, "White", (220, 120), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
         QUIT_BUTTON = Button("Izađi", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.5))
 
@@ -444,7 +448,7 @@ def pause_menu():
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
             gumb.update(screen)
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 spremi_igru()
@@ -452,15 +456,17 @@ def pause_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForCollision(MENU_MOUSE_POS):
+                    tp2 = time.perf_counter()
+                    tp += (tp2-tp1)
                     paused = False
                 if QUIT_BUTTON.checkForCollision(MENU_MOUSE_POS):
                     spremi_igru()
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    paused = False
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_p or event.key == pygame.K_ESCAPE:
+                    tp2 = time.perf_counter()
+                    tp += (tp2-tp1)
                     paused = False
 
         pygame.display.update()
@@ -717,31 +723,37 @@ def level_menu():
                             odabrani_level = "Level "+LEVEL1_GUMB.text_input
                             replay_state = True
                         else:
-                            draw_text(f"Otkljućaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
+                            draw_text(f"Otključaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
                             pygame.display.update()
                             time.sleep(2) 
                     else:
-                        draw_text(f"Otkljućaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
+                        draw_text(f"Otključaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
                         pygame.display.update()
                         time.sleep(2) 
                 if LEVEL2_GUMB.checkForCollision(MENU_MOUSE_POS):
-                    if LEVEL2_GUMB.text_input[0] <= level_state[-3]:
-                        if LEVEL2_GUMB.text_input[-1] <= level_state[-1]:
+                    if LEVEL2_GUMB.text_input[0] < level_state[-3]:
+                        odabrani_level = "Level "+LEVEL2_GUMB.text_input
+                        replay_state = True
+                    elif LEVEL2_GUMB.text_input[0] == level_state[-3]:
+                        if LEVEL2_GUMB.text_input[-1] < level_state[-1]:
                             odabrani_level = "Level "+LEVEL2_GUMB.text_input
                             replay_state = True
+                        elif LEVEL2_GUMB.text_input[-1] == level_state[-1]:
+                            odabrani_level = "Level "+LEVEL2_GUMB.text_input
+                            replay_state = False
                         else:
-                            draw_text(f"Otkljućaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
+                            draw_text(f"Otključaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
                             pygame.display.update()
-                            time.sleep(2)               
+                            time.sleep(1.5)
                     else:
-                        draw_text(f"Otkljućaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
+                        draw_text(f"Otključaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
                         pygame.display.update()
-                        time.sleep(2)
+                        time.sleep(1.5)
 
         pygame.display.update()
 
 def igra():
-    global screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, pozadina, skin_brojac, skinovi, level_state,uništeniProtivnici, postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,impossible_state,bozic_state
+    global tp, screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, pozadina, skin_brojac, skinovi, level_state,uništeniProtivnici, postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,impossible_state,bozic_state
     #slike
     zmaj_slika_og = skinovi[skin_brojac] #slika zmaja po skinu
     protivnik_og = pygame.image.load("birds.png")
@@ -786,7 +798,7 @@ def igra():
     #vrijeme
     vrijeme = 0
     t1 = time.perf_counter()
-
+    tp = 0
     #igrac varijable
     zmaj_h = screen.get_height() / 7
     zmaj_w = screen.get_width() / 12
@@ -1075,6 +1087,7 @@ def igra():
         stvoriVjetar()
     if vanzemaljac_state == True:
         stvoriVanzemaljca()
+
 
     run = True
     while run:
@@ -1447,7 +1460,7 @@ def igra():
         screen.blit(zmaj_slika, (zmaj_x, zmaj_y))
         #vrijeme
         t2 = time.perf_counter()
-        vrijeme =round(t2-t1,1)
+        vrijeme =round((t2-t1)-tp,1)
 
         #sidebar
         if power_birac == -1:
@@ -1481,7 +1494,7 @@ def igra():
 
         #pisanje teksta u sidebar
         draw_text(f"{odabrani_level}",text_font,(0,0,0),screen.get_width()*0.865,screen.get_height()*0.92)
-        draw_text(f"{ime}",text_font,(0,0,0),screen.get_width()*0.865,screen.get_height()*0.05)
+        draw_text(f"{ime}",text_font,(0,0,0),screen.get_width()*0.862,screen.get_height()*0.05)
         for i in range(život+1):
             x = screen.get_width()*0.05
             screen.blit(srce,(screen.get_width()*0.84375+x*i,screen.get_height()*0.145))
