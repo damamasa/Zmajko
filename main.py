@@ -190,8 +190,9 @@ def user_birac():
         pygame.display.update()
 
 def player_name():
-    global text_font3, screen, ime, level_state, postignuce, igraci, uništeniProtivnici
+    global screen, ime, level_state, postignuce, igraci, uništeniProtivnici
     ime = ""
+    font = pygame.font.Font(None, 60)
     text_box1 = pygame.Rect(screen.get_width()*0.45, screen.get_height()*0.5, screen.get_width()*0.1, screen.get_height()*0.05)
     pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
     pozadina.fill("Black")
@@ -202,12 +203,12 @@ def player_name():
     while run == True:
         screen.blit(pozadina_slika,(0,0)) 
         pygame.draw.rect(screen,"black", text_box1, 3)
-        surf1 = text_font3.render(ime,True,'white')
+        surf1 = font.render(ime,True,'white')
         screen.blit(surf1, (text_box1.x + 5, text_box1.y + 5))
         text_box1.w = max(200, surf1.get_width()+10)
-        draw_text("Unesi ime:",text_font3,"black",screen.get_width()/2.25,screen.get_height()/2.5)
+        draw_text("Unesi ime:",font,"black",screen.get_width()/2.25,screen.get_height()/2.5)
         MENU_MOUSE_POS = pygame.mouse.get_pos()
-        POTVRDA_BUTTON = Button(f"Potvrdi", 50, "Black", (220, 120), "Light Grey", "White", (screen.get_width()/2, screen.get_height()/1.5))
+        POTVRDA_BUTTON = Button(f"Potvrdi", 50, "Black", (screen.get_width()/8, screen.get_height()/8), "Light Grey", "White", (screen.get_width()/2, screen.get_height()/1.5))
         for gumb in [POTVRDA_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
@@ -249,22 +250,22 @@ def player_name():
 
 def postignuca():
     global screen, text_font,postignuce, text_font4
-    bg = pygame.transform.scale(pygame.image.load("users_bg.png"), (screen.get_width(), screen.get_height()))
+    bg = pygame.transform.scale(pygame.image.load("users_bg.png"), (screen.get_width()*0.9, screen.get_height()*0.9))
 
     tekst=[["Neprobojni štit","Preživi neprekidni napad neprijatelja bez gubitaka zdravlja."], ["Branič Svemira", "Uništi 100 protivničkih trupa."], ["Gospodar Svjetova","Prođi sve svjetove i postani nepobjedivi letač."],["HoHoHo", "Prođi božićni level."], ["Apsolutni Pobjednik", "Prođi nemogući svijet."], ["Zmajkova Legenda", "Otključaj sva postignuća da postaneš legenda poput Zmajka."]]
     run = True
     while run:
-        screen.blit(bg, (0, 0))
+        screen.blit(bg, (screen.get_width()*0.05, screen.get_height()*0.05))
         for i in range(len(postignuce)):
             if postignuce[i] == "da":
-                draw_text(tekst[i][0],text_font3,"green",screen.get_width()/10,screen.get_height()*0.04+(i*screen.get_height()/6.5))
-                draw_text(tekst[i][1],text_font4,"green",screen.get_width()/10,screen.get_height()*0.10+(i*screen.get_height()/6.5))
+                draw_text(tekst[i][0],text_font3,"green",screen.get_width()/10,screen.get_height()*0.05+(i*screen.get_height()/6.5))
+                draw_text(tekst[i][1],text_font4,"green",screen.get_width()/10,screen.get_height()*0.11+(i*screen.get_height()/6.5))
             else:
-                draw_text(tekst[i][0],text_font3,"red",screen.get_width()/10,screen.get_height()*0.04+(i*screen.get_height()/6.5))
-                draw_text(tekst[i][1],text_font4,"red",screen.get_width()/10,screen.get_height()*0.10+(i*screen.get_height()/6.5))
+                draw_text(tekst[i][0],text_font3,"red",screen.get_width()/10,screen.get_height()*0.05+(i*screen.get_height()/6.5))
+                draw_text(tekst[i][1],text_font4,"red",screen.get_width()/10,screen.get_height()*0.11+(i*screen.get_height()/6.5))
         MENU_MOUSE_POS = pygame.mouse.get_pos()
-        MAIN_GUMB = Button("Vrati se", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()*0.9, screen.get_height()*0.9))
-        draw_text(f"Ostvareno: {postignuce.count('da')} / {len(postignuce)}",text_font3,"light grey",screen.get_width()*0.72,screen.get_height()*0.08)
+        MAIN_GUMB = Button("Vrati se", 70, "Black", (220, 120), "Light Grey", "Red", (screen.get_width()*0.85, screen.get_height()*0.85))
+        draw_text(f"Ostvareno: {postignuce.count('da')} / {len(postignuce)}",text_font,"black",screen.get_width()*0.72,screen.get_height()*0.08)
         for gumb in [MAIN_GUMB]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
@@ -332,13 +333,13 @@ def main_menu():
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
         #gumbovi na desnoj strani
-        IGRAJ_GUMB = Button("Kampanja", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.3))
-        LEVEL_GUMB = Button("Nemoguć level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.45))
-        BOZIC_GUMB = Button("Božićni level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.6))
-        ACHIEVEMENTS_GUMB = Button("Postignuća", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.75))
-        QUIT_BUTTON = Button("Izađi", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.9))
+        IGRAJ_GUMB = Button("Kampanja", 90, "Black", (screen.get_width()/3, screen.get_height()/10), "#AE7A60", "#715040", (screen.get_width()*0.776, screen.get_height()*0.31))
+        LEVEL_GUMB = Button("Nemoguć level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.42))
+        BOZIC_GUMB = Button("Božićni level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.53))
+        TUTORIAL_BUTTON = Button("Kako igrati?", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.68))
+        ACHIEVEMENTS_GUMB = Button("Postignuća", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.79))
+        QUIT_BUTTON = Button("Izađi", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.9))
         USERS_BUTTON = Button("Promijeni igrača", 50, "Blue", (screen.get_width()/5.5, screen.get_height()/20), "#AE7A60", "darksalmon", (screen.get_width()*0.172, screen.get_height()/3.2))
-        TUTORIAL_BUTTON = Button("Kako igrati?", 50, "Black", (screen.get_width()/5.5, screen.get_height()/20), "#AE7A60", "darksalmon", (screen.get_width()*0.45, screen.get_height()/2))
         for gumb in [IGRAJ_GUMB, QUIT_BUTTON, LEVEL_GUMB, ACHIEVEMENTS_GUMB, USERS_BUTTON, BOZIC_GUMB, TUTORIAL_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
@@ -406,7 +407,7 @@ def tutorial():
         draw_text(tutorial_tekst[i],text_font,"black",screen.get_width()/5,screen.get_height()*(0.2+(0.1*i)))
     run = True
     while run == True:
-        NASTAVI_BUTTON = Button("Dalje", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.85))
+        NASTAVI_BUTTON = Button("Vrati se ->", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.85))
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         for gumb in [NASTAVI_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
@@ -435,9 +436,9 @@ def pause_menu():
     while paused:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         pauzirano_logo = pygame.transform.scale(pygame.image.load("pauzirano_logo.png"), (screen.get_width()/3, screen.get_height()/5))
-        PLAY_BUTTON = Button("Igraj ponovno", 70, "White", (360, 120), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
-        MAIN_BUTTON = Button("Glavni izbornik", 70, "White", (360, 120), "Light Grey", "dimgray", (screen.get_width()/2, screen.get_height()/1.5))
-        QUIT_BUTTON = Button("Izađi", 70, "White", (360, 120), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.2))
+        PLAY_BUTTON = Button("Igraj ponovno", 70, "black", (screen.get_width()*0.25, screen.get_height()*0.14), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
+        MAIN_BUTTON = Button("Glavni izbornik", 70, "black", (screen.get_width()*0.25, screen.get_height()*0.14), "Light Grey", "dimgray", (screen.get_width()/2, screen.get_height()/1.5))
+        QUIT_BUTTON = Button("Izađi", 70, "black", (screen.get_width()*0.25, screen.get_height()*0.14), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.2))
 
         screen.blit(pauzirano_logo, (screen.get_width()/3,screen.get_height()/10))
 
@@ -481,9 +482,9 @@ def game_over():
     run = True
     while run == True:
         MENU_MOUSE_POS = pygame.mouse.get_pos()
-        PLAY_BUTTON = Button("Igraj ponovno", 70, "White", (360, 120), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
-        MAIN_BUTTON = Button("Glavni izbornik", 70, "White", (360, 120), "Light Grey", "dimgray", (screen.get_width()/2, screen.get_height()/1.5))
-        QUIT_BUTTON = Button("Izađi", 70, "White", (360, 120), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.2))
+        PLAY_BUTTON = Button("Igraj ponovno", 70, "black", (screen.get_width()*0.25, screen.get_height()*0.14), "Light Grey", "Green", (screen.get_width()/2, screen.get_height()/2))
+        MAIN_BUTTON = Button("Glavni izbornik", 70, "black", (screen.get_width()*0.25, screen.get_height()*0.14), "Light Grey", "dimgray", (screen.get_width()/2, screen.get_height()/1.5))
+        QUIT_BUTTON = Button("Izađi", 70, "black", (screen.get_width()*0.25, screen.get_height()*0.14), "Light Grey", "Red", (screen.get_width()/2, screen.get_height()/1.2))
         
         kraj_logo = pygame.transform.scale(pygame.image.load("kraj_logo.png"), (screen.get_width()/3, screen.get_height()/5))
         screen.blit(kraj_logo, (screen.get_width()/3,screen.get_height()/10))
@@ -667,24 +668,24 @@ def level_menu():
     while run == True:
         if pozadina_y == 1: #pozicija leveli slike po svijetovima
             leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd1.jpg"), (screen.get_width(), screen.get_height()))
-            LEVEL1_GUMB = Button("1-1", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.73))
-            LEVEL2_GUMB = Button("1-2", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.6825, screen.get_height()*0.345))
+            LEVEL1_GUMB = Button("1-1", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.73))
+            LEVEL2_GUMB = Button("1-2", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.6825, screen.get_height()*0.345))
         elif pozadina_y == 2:
             leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd2.jpg"), (screen.get_width(), screen.get_height()))
-            LEVEL1_GUMB = Button("2-1", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.68, screen.get_height()*0.665))
-            LEVEL2_GUMB = Button("2-2", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.285))
+            LEVEL1_GUMB = Button("2-1", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.68, screen.get_height()*0.665))
+            LEVEL2_GUMB = Button("2-2", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.285))
         elif pozadina_y == 3:
             leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd3.jpg"), (screen.get_width(), screen.get_height()))
-            LEVEL1_GUMB = Button("3-1", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.73))
-            LEVEL2_GUMB = Button("3-2", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.6825, screen.get_height()*0.345))
+            LEVEL1_GUMB = Button("3-1", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.73))
+            LEVEL2_GUMB = Button("3-2", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.6825, screen.get_height()*0.345))
         elif pozadina_y == 4:
             leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd4.jpg"), (screen.get_width(), screen.get_height()))
-            LEVEL1_GUMB = Button("4-1", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.6825, screen.get_height()*0.73))
-            LEVEL2_GUMB = Button("4-2", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.345))
+            LEVEL1_GUMB = Button("4-1", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.6825, screen.get_height()*0.73))
+            LEVEL2_GUMB = Button("4-2", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.312, screen.get_height()*0.345))
         elif pozadina_y == 5:
             leveli_pozadina = pygame.transform.scale(pygame.image.load("level_wrd5.jpg"), (screen.get_width(), screen.get_height()))
-            LEVEL1_GUMB = Button("5-1", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.32, screen.get_height()*0.655))
-            LEVEL2_GUMB = Button("5-2", 70, "White", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.69, screen.get_height()*0.28))
+            LEVEL1_GUMB = Button("5-1", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.32, screen.get_height()*0.655))
+            LEVEL2_GUMB = Button("5-2", 70, "black", (screen.get_width()*0.078, screen.get_height()*0.128), "Light Grey", "Green", (screen.get_width()*0.69, screen.get_height()*0.28))
         screen.blit(leveli_pozadina, (0,0))
         gore_arrow = Button_Slika(screen.get_width()*0.45,screen.get_height()*0.05,arrow, 0.3)
         dolje_arrow = Button_Slika(screen.get_width()*0.45,screen.get_height()*0.85,pygame.transform.flip(arrow, False, True), 0.3)
@@ -696,8 +697,8 @@ def level_menu():
             time.sleep(0.2)
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
-        IGRAJ_GUMB = Button("Nastavi", 70, "White", (220, 120), "Light Grey", "Green", (screen.get_width()*0.9, screen.get_height()*0.9))
-        MAIN_GUMB = Button("Vrati se", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()*0.1, screen.get_height()*0.9))
+        IGRAJ_GUMB = Button("Nastavi", 70, "black", (screen.get_width()*0.15, screen.get_height()*0.12), "Light gray", "Green", (screen.get_width()*0.9, screen.get_height()*0.9))
+        MAIN_GUMB = Button("Vrati se", 70, "black", (screen.get_width()*0.15, screen.get_height()*0.12), "Light gray", "Red", (screen.get_width()*0.1, screen.get_height()*0.9))
         draw_text(f"Odabrano: {odabrani_level}",text_font2,"Light Grey",screen.get_width()/20,screen.get_height()/12)
 
         for gumb in [IGRAJ_GUMB, MAIN_GUMB, LEVEL1_GUMB, LEVEL2_GUMB]:
@@ -1244,7 +1245,7 @@ def igra():
             zmaj_y = 0
         if zmaj_y + zmaj_h> screen.get_height():
             zmaj_y = screen.get_height() - zmaj_h
-        
+
         for i in range(brojPtica): 
             ProtivnikY[i] += protivnikPomakY[i] #micanje protivnika
             screen.blit(ProtivnikSlika[i], (ProtivnikX[i],ProtivnikY[i])) #crtanje protivnika
@@ -1252,7 +1253,7 @@ def igra():
             if ProtivnikY[i] > screen.get_height(): #respawnanje protivnika
                 vratiProtivnika(i)
                 
-            if pygame.Rect(ProtivnikX[i]+ProtivnikW[i]*0.15, ProtivnikY[i]+ProtivnikH[i]*0.15, ProtivnikW[i]*0.7, ProtivnikH[i]*0.7).colliderect(pygame.Rect(zmaj_x+zmaj_w*0.15,zmaj_y+zmaj_h*0.15,zmaj_w*0.7,zmaj_h*0.7)) and isHit == False: #collision protivnika
+            if pygame.Rect(ProtivnikX[i]+ProtivnikW[i]*0.05, ProtivnikY[i]+ProtivnikH[i]*0.05, ProtivnikW[i]*0.9, ProtivnikH[i]*0.9).colliderect(pygame.Rect(zmaj_x+zmaj_w*0.1,zmaj_y+zmaj_h*0.1,zmaj_w*0.8,zmaj_h*0.8)) and isHit == False: #collision protivnika
                 život -= 1
                 isHit = True
                 timer1 = vrijeme
