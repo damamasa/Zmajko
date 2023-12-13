@@ -56,13 +56,18 @@ def draw_text(text,font,text_col,x,y):
         screen.blit(img,(x,y))
 
 def main():
-    global screen, text_font, text_font2, run
+    global screen, text_font, text_font2, text_font3, run, postignuce, ime, koji_user, text_font4
     pygame.init()
 
     #font i tekst
     text_font = pygame.font.SysFont("Arial",50)
     text_font2 = pygame.font.SysFont("Arial",80)
+    text_font3 = pygame.font.SysFont("Arial",60)
+    text_font4 = pygame.font.SysFont("Arial",40)
     screen = None
+    postignuce = ["ne", "ne", "ne", "ne", "ne", "ne"]
+    ime = ""
+    koji_user = ""
 
     os.environ["SDL_VIDEO_CENTERED"]="1"
     info=pygame.display.Info()
@@ -74,24 +79,16 @@ def main():
     while not run:
         run = main_menu()
 
-ime = ""
-koji_user = ""
-
 def brisanje_usera():
-    global ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,uništeniProtivnici
+    global ime, level_state,postignuce,uništeniProtivnici
     ime =""
     level_state = "Level 1-1"
-    postignuce1 = "ne"
-    postignuce2 = "ne"
-    postignuce3 = "ne"
-    postignuce4 = "ne"
-    postignuce5 = "ne"
-    postignuce6 = "ne"
+    postignuce = ["ne", "ne", "ne", "ne", "ne", "ne"]
     uništeniProtivnici = "0"
     spremi_igru()
 
 def user_birac():
-    global screen, text_font, pozadina_slika, koji_user, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,igraci
+    global screen, text_font, pozadina_slika, koji_user, ime, level_state,igraci
     pozadina_slika = pygame.image.load("users_bg.png")
     pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
     pozadina.fill("Black")
@@ -193,8 +190,7 @@ def user_birac():
         pygame.display.update()
 
 def player_name():
-    global screen, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6, igraci, uništeniProtivnici
-    font = pygame.font.Font(None, 60)
+    global text_font3, screen, ime, level_state, postignuce, igraci, uništeniProtivnici
     ime = ""
     text_box1 = pygame.Rect(screen.get_width()*0.45, screen.get_height()*0.5, screen.get_width()*0.1, screen.get_height()*0.05)
     pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
@@ -206,11 +202,10 @@ def player_name():
     while run == True:
         screen.blit(pozadina_slika,(0,0)) 
         pygame.draw.rect(screen,"black", text_box1, 3)
-        surf1 = font.render(ime,True,'white')
+        surf1 = text_font3.render(ime,True,'white')
         screen.blit(surf1, (text_box1.x + 5, text_box1.y + 5))
         text_box1.w = max(200, surf1.get_width()+10)
-        draw_text("Unesi ime:",font,"black",screen.get_width()/2.25,screen.get_height()/2.5)
-        
+        draw_text("Unesi ime:",text_font3,"black",screen.get_width()/2.25,screen.get_height()/2.5)
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         POTVRDA_BUTTON = Button(f"Potvrdi", 50, "Black", (220, 120), "Light Grey", "White", (screen.get_width()/2, screen.get_height()/1.5))
         for gumb in [POTVRDA_BUTTON]:
@@ -232,17 +227,17 @@ def player_name():
                             igraci[i] = clan.split("/")
                         igraci[int(koji_user)-1][1] = ime
                         level_state = igraci[int(koji_user)-1][2]
-                        postignuce1 = igraci[int(koji_user)-1][3]
-                        postignuce2 = igraci[int(koji_user)-1][4]
-                        postignuce3 = igraci[int(koji_user)-1][5]
-                        postignuce4 = igraci[int(koji_user)-1][6]
-                        postignuce5 = igraci[int(koji_user)-1][7]
-                        postignuce6 = igraci[int(koji_user)-1][8]
+                        postignuce[0] = igraci[int(koji_user)-1][3]
+                        postignuce[1] = igraci[int(koji_user)-1][4]
+                        postignuce[2] = igraci[int(koji_user)-1][5]
+                        postignuce[3] = igraci[int(koji_user)-1][6]
+                        postignuce[4] = igraci[int(koji_user)-1][7]
+                        postignuce[5] = igraci[int(koji_user)-1][8]
                         uništeniProtivnici = int(igraci[int(koji_user)-1][9])
                         run = False
                         main_menu()
                     else:
-                        draw_text("Upiši ime duljine 1-9 slova",font,"black",screen.get_width()/3,screen.get_height()*0.8)
+                        draw_text("Upiši ime duljine 1-9 slova",text_font3,"black",screen.get_width()/3,screen.get_height()*0.8)
                         pygame.display.update()
                         time.sleep(1.5)
             if event.type == pygame.KEYDOWN:
@@ -253,49 +248,45 @@ def player_name():
         pygame.display.update()
 
 def postignuca():
-    global screen
-    font = pygame.font.Font(None, 60)
+    global screen, text_font,postignuce, text_font4
     bg = pygame.transform.scale(pygame.image.load("users_bg.png"), (screen.get_width(), screen.get_height()))
-    run2 = True
-    tekst1 = ""
-    tekst2 = ""
-    tekst3 = ""
-    tekst4 = ""
-    tekst5 = ""
-    tekst6 = ""
-    if postignuce1 == "da":
-        tekst1 = "Neprobojni Štit: Preživi neprekidni napad neprijatelja bez gubitaka zdravlja."
-    if postignuce2 == "da":
-        tekst2 ="Branič Svemira: Uništi 100 protivničkih trupa."
-    if postignuce3 == "da":
-        tekst3="Gospodar Svjetova: Prođi sve svjetove i postani nepobjedivi letač."
-    if postignuce4 == "da":
-        tekst4="HoHoHo: Prođi božićni level."
-    if postignuce5 == "da":
-        tekst5="Apsolutni Pobjednik: Prođi nemogući svijet."
-    if postignuce6 == "da":
-        tekst6="Zmajkova Legenda: Otključaj sva postignuća da postaneš legenda poput Zmajka. "
-    while run2:
+
+    tekst=[["Neprobojni štit","Preživi neprekidni napad neprijatelja bez gubitaka zdravlja."], ["Branič Svemira", "Uništi 100 protivničkih trupa."], ["Gospodar Svjetova","Prođi sve svjetove i postani nepobjedivi letač."],["HoHoHo", "Prođi božićni level."], ["Apsolutni Pobjednik", "Prođi nemogući svijet."], ["Zmajkova Legenda", "Otključaj sva postignuća da postaneš legenda poput Zmajka."]]
+    run = True
+    while run:
         screen.blit(bg, (0, 0))
+        for i in range(len(postignuce)):
+            if postignuce[i] == "da":
+                draw_text(tekst[i][0],text_font3,"green",screen.get_width()/10,screen.get_height()*0.04+(i*screen.get_height()/6.5))
+                draw_text(tekst[i][1],text_font4,"green",screen.get_width()/10,screen.get_height()*0.10+(i*screen.get_height()/6.5))
+            else:
+                draw_text(tekst[i][0],text_font3,"red",screen.get_width()/10,screen.get_height()*0.04+(i*screen.get_height()/6.5))
+                draw_text(tekst[i][1],text_font4,"red",screen.get_width()/10,screen.get_height()*0.10+(i*screen.get_height()/6.5))
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+        MAIN_GUMB = Button("Vrati se", 70, "White", (220, 120), "Light Grey", "Red", (screen.get_width()*0.9, screen.get_height()*0.9))
+        draw_text(f"Ostvareno: {postignuce.count('da')} / {len(postignuce)}",text_font3,"light grey",screen.get_width()*0.72,screen.get_height()*0.08)
+        for gumb in [MAIN_GUMB]:
+            if gumb.checkForCollision(MENU_MOUSE_POS):
+                gumb.changeButtonColor()
+            gumb.update(screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run2 = False
+                run = False
                 sys.exit() 
             if event.type == pygame.KEYDOWN and (event.key == pygame.K_p or event.key == pygame.K_ESCAPE):
-                run2 = False
-                main_menu()      
-        draw_text(tekst1,font,"white",200,100)
-        draw_text(tekst2,font,"white",200,200)
-        draw_text(tekst3,font,"white",200,300)
-        draw_text(tekst4,font,"white",200,400)
-        draw_text(tekst5,font,"white",200,500)
-        draw_text(tekst6,font,"white",200,600)
+                run = False
+                main_menu()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if MAIN_GUMB.checkForCollision(MENU_MOUSE_POS):
+                    run = False
+                    main_menu()
 
         pygame.display.update()
 
 def spremi_igru():
-    global igraci, koji_user, ime,level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6, output, uništeniProtivnici
-    igraci[int(koji_user)-1] = [koji_user,ime,level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,str(uništeniProtivnici)]
+    global igraci, koji_user, ime,level_state, output, uništeniProtivnici, postignuce
+    igraci[int(koji_user)-1] = [koji_user,ime,level_state,postignuce[0],postignuce[1],postignuce[2],postignuce[3],postignuce[4],postignuce[5],str(uništeniProtivnici)]
     output = ""
     for i in range(len(igraci)):
         for l in range(len(igraci[i])):
@@ -306,17 +297,17 @@ def spremi_igru():
         datoteka.write(output)
 
 def load_igru():
-    global koji_user, ime, level_state,postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,igraci, uništeniProtivnici
+    global koji_user, ime, level_state,postignuce,igraci, uništeniProtivnici
     if igraci[int(koji_user)-1][1] == "":
         player_name()
     else:
         level_state = igraci[int(koji_user)-1][2]
-        postignuce1 = igraci[int(koji_user)-1][3]
-        postignuce2 = igraci[int(koji_user)-1][4]
-        postignuce3 = igraci[int(koji_user)-1][5]
-        postignuce4 = igraci[int(koji_user)-1][6]
-        postignuce5 = igraci[int(koji_user)-1][7]
-        postignuce6 = igraci[int(koji_user)-1][8]
+        postignuce[0] = igraci[int(koji_user)-1][3]
+        postignuce[1] = igraci[int(koji_user)-1][4]
+        postignuce[2] = igraci[int(koji_user)-1][5]
+        postignuce[3] = igraci[int(koji_user)-1][6]
+        postignuce[4] = igraci[int(koji_user)-1][7]
+        postignuce[5] = igraci[int(koji_user)-1][8]
         uništeniProtivnici = int(igraci[int(koji_user)-1][9])
         ime = igraci[int(koji_user)-1][1]
         main_menu()
@@ -763,7 +754,7 @@ def level_menu():
         pygame.display.update()
 
 def igra():
-    global run, tp, screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, pozadina, skin_brojac, skinovi, level_state,uništeniProtivnici, postignuce1,postignuce2,postignuce3,postignuce4,postignuce5,postignuce6,impossible_state,bozic_state
+    global run, tp, screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, pozadina, skin_brojac, skinovi, level_state,uništeniProtivnici, postignuce,impossible_state,bozic_state
     #slike
     zmaj_slika_og = skinovi[skin_brojac] #slika zmaja po skinu
     protivnik_og = pygame.image.load("birds.png")
@@ -1559,19 +1550,19 @@ def igra():
         
         if progress == 1: #runda je gotova
             if život == 2: #nisi pogođen
-                postignuce1 = "da"
+                postignuce[0] = "da"
             if uništeniProtivnici >= 100:
-                postignuce2 = "da"
+                postignuce[1] = "da"
             if level_state == "Level 5-2":
-                postignuce3 = "da"
+                postignuce[2] = "da"
             if impossible_state == True: #nemogući level
-                postignuce4 = "da"
+                postignuce[3] = "da"
                 main_menu()
             if bozic_state == True:
-                postignuce5 = "da"
+                postignuce[4] = "da"
                 main_menu()
-            if postignuce1 == "da" and postignuce2 == "da" and postignuce3 == "da" and postignuce4 == "da" and postignuce5 == "da":
-                postignuce6 = "da"
+            if postignuce[0] == "da" and postignuce[1] == "da" and postignuce[2] == "da" and postignuce[3] == "da" and postignuce[4] == "da":
+                postignuce[5] = "da"
                 
             run = False
             if replay_state == False and impossible_state == False and bozic_state == False:
