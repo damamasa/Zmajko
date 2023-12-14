@@ -113,18 +113,18 @@ def user_birac():
                 text[i]= "[stvori račun]"
             else:
                 text[i] = f"{igraci[i][1]} - {igraci[i][2]}"
-        USER1_BUTTON = Button(text[0], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.25))
-        USER1_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.25))
-        USER2_BUTTON = Button(text[1], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.37))
-        USER2_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.37))
-        USER3_BUTTON = Button(text[2], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.49))
-        USER3_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.49))
-        USER4_BUTTON = Button(text[3], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.61))
-        USER4_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.61))
-        USER5_BUTTON = Button(text[4], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.73))
-        USER5_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.73))
-        USER6_BUTTON = Button(text[5], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.3, screen.get_height()*0.85))
-        USER6_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.7, screen.get_height()*0.85))
+        USER1_BUTTON = Button(text[0], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.3, screen.get_height()*0.25))
+        USER1_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.7, screen.get_height()*0.25))
+        USER2_BUTTON = Button(text[1], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.3, screen.get_height()*0.37))
+        USER2_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.7, screen.get_height()*0.37))
+        USER3_BUTTON = Button(text[2], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.3, screen.get_height()*0.49))
+        USER3_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.7, screen.get_height()*0.49))
+        USER4_BUTTON = Button(text[3], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.3, screen.get_height()*0.61))
+        USER4_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.7, screen.get_height()*0.61))
+        USER5_BUTTON = Button(text[4], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.3, screen.get_height()*0.73))
+        USER5_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.7, screen.get_height()*0.73))
+        USER6_BUTTON = Button(text[5], 70, "Light Grey", (screen.get_width()*0.4, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.3, screen.get_height()*0.85))
+        USER6_DELETE = Button(f"X", 70, "Red", (screen.get_width()*0.15, screen.get_height()/9), "#0f3236", "#50908c", (screen.get_width()*0.7, screen.get_height()*0.85))
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         
         for gumb in [USER1_BUTTON, USER2_BUTTON, USER3_BUTTON, USER4_BUTTON, USER5_BUTTON, USER6_BUTTON,USER1_DELETE,USER2_DELETE,USER3_DELETE,USER4_DELETE,USER5_DELETE,USER6_DELETE]:
@@ -315,15 +315,15 @@ def load_igru():
 
 def main_menu():
     global screen, text_font, text_font2, skinovi, skin_brojac, igraci, impossible_state, odabrani_level, replay_state, bozic_state
-    zmajko_pozadina = pygame.transform.scale(pygame.image.load("pozadina_mainmenu.png"), (screen.get_width(), screen.get_height()))
+    zmajko_pozadina = pygame.transform.scale(pygame.image.load("p.jpg"), (screen.get_width(), screen.get_height()))
     skin1 = pygame.transform.scale(pygame.image.load("zmaj.png"), (screen.get_width()*0.2265, screen.get_height()*0.365))
     skin2 = pygame.transform.scale(pygame.image.load("zmaj2-leti.png"), (screen.get_width()*0.2265, screen.get_height()*0.365))
     skin3 = pygame.transform.scale(pygame.image.load("zmaj3.png"), (screen.get_width()*0.2265, screen.get_height()*0.365))
     skin_brojac = 0
     skinovi = [skin1, skin2, skin3]
     arrow = pygame.transform.rotate(pygame.image.load("arrow.png"),90)
-    strijelica1 = Button_Slika(screen.get_width()/8.5,screen.get_height()*0.85,arrow, 0.1)
-    strijelica2 = Button_Slika(screen.get_width()/5,screen.get_height()*0.85,pygame.transform.flip(arrow, True, False), 0.1)
+    strijelica1 = Button_Slika(screen.get_width()/8.52,screen.get_height()*0.85,arrow, 0.1)
+    strijelica2 = Button_Slika(screen.get_width()/4,screen.get_height()*0.85,pygame.transform.flip(arrow, True, False), 0.1)
     impossible_state = False
     bozic_state = False
     run = True
@@ -333,20 +333,20 @@ def main_menu():
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
         #gumbovi na desnoj strani
-        IGRAJ_GUMB = Button("Kampanja", 90, "Black", (screen.get_width()/3, screen.get_height()/10), "#AE7A60", "#715040", (screen.get_width()*0.776, screen.get_height()*0.31))
-        LEVEL_GUMB = Button("Nemoguć level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.42))
-        BOZIC_GUMB = Button("Božićni level", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.53))
-        TUTORIAL_BUTTON = Button("Kako igrati?", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.68))
-        ACHIEVEMENTS_GUMB = Button("Postignuća", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.79))
-        QUIT_BUTTON = Button("Izađi", 70, "Black", (screen.get_width()/3.5, screen.get_height()/11.5), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.9))
-        USERS_BUTTON = Button("Promijeni igrača", 50, "Blue", (screen.get_width()/5.5, screen.get_height()/20), "#AE7A60", "darksalmon", (screen.get_width()*0.172, screen.get_height()/3.2))
+        IGRAJ_GUMB = Button("Kampanja", 70, "White", (screen.get_width()/3.5, screen.get_height()/11.5), "#0f3236", "#50908c", (screen.get_width()*0.8, screen.get_height()*0.31))
+        LEVEL_GUMB = Button("Nemoguć level", 70, "White", (screen.get_width()/3.5, screen.get_height()/11.5), "#0f3236", "#50908c", (screen.get_width()*0.8, screen.get_height()*0.42))
+        BOZIC_GUMB = Button("Božićni level", 70, "White", (screen.get_width()/3.5, screen.get_height()/11.5), "#0f3236", "#50908c", (screen.get_width()*0.8, screen.get_height()*0.53))
+        TUTORIAL_BUTTON = Button("Kako igrati?", 70, "White", (screen.get_width()/3.5, screen.get_height()/11.5), "#0f3236", "#50908c", (screen.get_width()*0.8, screen.get_height()*0.64))
+        ACHIEVEMENTS_GUMB = Button("Postignuća", 70, "White", (screen.get_width()/3.5, screen.get_height()/11.5), "#0f3236", "#50908c", (screen.get_width()*0.8, screen.get_height()*0.75))
+        QUIT_BUTTON = Button("Izađi", 70, "White", (screen.get_width()/3.5, screen.get_height()/11.5), "#0f3236", "#50908c", (screen.get_width()*0.8, screen.get_height()*0.86))
+        USERS_BUTTON = Button("Promijeni igrača", 50, "White", (screen.get_width()/5.5, screen.get_height()/20), "#0f3236", "darksalmon", (screen.get_width()*0.2, screen.get_height()/2.8))
         for gumb in [IGRAJ_GUMB, QUIT_BUTTON, LEVEL_GUMB, ACHIEVEMENTS_GUMB, USERS_BUTTON, BOZIC_GUMB, TUTORIAL_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
             gumb.update(screen)
         
         #skinovi
-        screen.blit(skinovi[skin_brojac], (screen.get_width()*0.055, screen.get_height()*0.47))
+        screen.blit(skinovi[skin_brojac], (screen.get_width()*0.077, screen.get_height()*0.5))
         if strijelica1.draw(screen):
             skin_brojac -=1
         if strijelica2.draw(screen):
@@ -401,13 +401,13 @@ def tutorial():
     pozadina.set_alpha(100)
     screen.blit(pozadina, (0,0))
     screen.blit(pygame.transform.scale(pozadina_slika, (screen.get_width()*0.9, screen.get_height()*0.9)), (screen.get_width()/2-screen.get_width()*0.45, screen.get_height()/2-screen.get_height()*0.45))
-    draw_text("Kako igrati",text_font,"black",screen.get_width()/2.35,screen.get_height()/8)
+    draw_text("Kako igrati",text_font,"white",screen.get_width()/2.35,screen.get_height()/8)
     tutorial_tekst = ["W - gore", "A - lijevo", "S - dolje", "D - desno", "SPACE - pucanje", "Lijevi klik/Desni klik - mijenjanje powerupova", "P/ESC - pauza"]
     for i in range(len(tutorial_tekst)):
-        draw_text(tutorial_tekst[i],text_font,"black",screen.get_width()/5,screen.get_height()*(0.2+(0.1*i)))
+        draw_text(tutorial_tekst[i],text_font,"white",screen.get_width()/5,screen.get_height()*(0.2+(0.1*i)))
     run = True
     while run == True:
-        NASTAVI_BUTTON = Button("Vrati se ->", 70, "Black", (screen.get_width()/3.5, screen.get_height()/9), "#AE7A60", "#715040", (screen.get_width()*0.8, screen.get_height()*0.85))
+        NASTAVI_BUTTON = Button("Vrati se ->", 70, "white", (screen.get_width()/4, screen.get_height()/10), "#0f3236", "#50908c", (screen.get_width()*0.8, screen.get_height()*0.85))
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         for gumb in [NASTAVI_BUTTON]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
