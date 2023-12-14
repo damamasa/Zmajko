@@ -249,23 +249,23 @@ def player_name():
         pygame.display.update()
 
 def postignuca():
-    global screen, text_font,postignuce, text_font4
+    global screen, text_font2,postignuce, text_font4, text_font3
     bg = pygame.transform.scale(pygame.image.load("users_bg.png"), (screen.get_width()*0.9, screen.get_height()*0.9))
 
-    tekst=[["Neprobojni štit","Preživi neprekidni napad neprijatelja bez gubitaka zdravlja."], ["Branič Svemira", "Uništi 100 protivničkih trupa."], ["Gospodar Svjetova","Prođi sve svjetove i postani nepobjedivi letač."],["HoHoHo", "Prođi božićni level."], ["Apsolutni Pobjednik", "Prođi nemogući svijet."], ["Zmajkova Legenda", "Otključaj sva postignuća da postaneš legenda poput Zmajka."]]
+    tekst=[["1) Neprobojni štit","Preživi neprekidni napad neprijatelja bez gubitaka zdravlja."], ["2) Branič Svemira", "Uništi 100 protivničkih trupa."], ["3) Gospodar Svjetova","Prođi sve svjetove i postani nepobjedivi letač."],["4) HoHoHo", "Prođi božićni level."], ["5) Apsolutni Pobjednik", "Prođi nemogući svijet."], ["6) Zmajkova Legenda", "Otključaj sva postignuća da postaneš legenda poput Zmajka."]]
     run = True
     while run:
         screen.blit(bg, (screen.get_width()*0.05, screen.get_height()*0.05))
         for i in range(len(postignuce)):
             if postignuce[i] == "da":
-                draw_text(tekst[i][0],text_font3,"green",screen.get_width()/10,screen.get_height()*0.05+(i*screen.get_height()/6.5))
-                draw_text(tekst[i][1],text_font4,"green",screen.get_width()/10,screen.get_height()*0.11+(i*screen.get_height()/6.5))
+                draw_text(tekst[i][0],text_font3,"green",screen.get_width()/10,screen.get_height()*0.01+(i*screen.get_height()/7.5))
+                draw_text(tekst[i][1],text_font4,"light grey",screen.get_width()/10,screen.get_height()*0.16+(i*screen.get_height()/7.5))
             else:
-                draw_text(tekst[i][0],text_font3,"red",screen.get_width()/10,screen.get_height()*0.05+(i*screen.get_height()/6.5))
-                draw_text(tekst[i][1],text_font4,"red",screen.get_width()/10,screen.get_height()*0.11+(i*screen.get_height()/6.5))
+                draw_text(tekst[i][0],text_font3,"#FF3030",screen.get_width()/10,screen.get_height()*0.1+(i*screen.get_height()/7.5))
+                draw_text(tekst[i][1],text_font4,"light grey",screen.get_width()/10,screen.get_height()*0.16+(i*screen.get_height()/7.5))
         MENU_MOUSE_POS = pygame.mouse.get_pos()
-        MAIN_GUMB = Button("Vrati se", 70, "Black", (220, 120), "Light Grey", "Red", (screen.get_width()*0.85, screen.get_height()*0.85))
-        draw_text(f"Ostvareno: {postignuce.count('da')} / {len(postignuce)}",text_font,"black",screen.get_width()*0.72,screen.get_height()*0.08)
+        MAIN_GUMB = Button("Vrati se", 70, "white",(screen.get_width()*0.15, screen.get_height()*0.128), "#0f3236", "#50908c", (screen.get_width()*0.85, screen.get_height()*0.85))
+        draw_text(f"{postignuce.count('da')} / {len(postignuce)}",text_font2,"white",screen.get_width()*0.81,screen.get_height()*0.09)
         for gumb in [MAIN_GUMB]:
             if gumb.checkForCollision(MENU_MOUSE_POS):
                 gumb.changeButtonColor()
@@ -759,8 +759,64 @@ def level_menu():
 
         pygame.display.update()
 
+def tranzicija_u_level():
+    global screen, text_font, pozadina_slika, text_font2
+    t1 = time.perf_counter()
+    pozadina_slika = pygame.image.load("users_bg.png")
+    pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
+    pozadina.fill("Black")
+    pozadina.set_alpha(100)
+    screen.blit(pozadina, (0,0))
+    screen.blit(pygame.transform.scale(pozadina_slika, (screen.get_width()*0.5, screen.get_height()*0.5)), (screen.get_width()/2-screen.get_width()*0.25, screen.get_height()/2-screen.get_height()*0.25))
+    draw_text("Pripremi se za",text_font,"white",screen.get_width()/2.35,screen.get_height()*0.4)
+    run = True
+    while run == True:
+        t2 = time.perf_counter()
+        if t2-t1 <= 1:
+            draw_text("3",text_font2,"Red",screen.get_width()*0.5,screen.get_height()*0.45)
+        elif t2-t1 > 1 and t2-t1 <= 2:
+            draw_text("2",text_font2,"Red",screen.get_width()*0.5,screen.get_height()*0.53)
+        elif t2-t1 > 2 and t2-t1 <=3:
+            draw_text("1",text_font2,"Red",screen.get_width()*0.5,screen.get_height()*0.61)
+        elif t2-t1 > 2.5:
+            run = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                spremi_igru()
+                pygame.quit()
+                sys.exit()
+
+        pygame.display.update()
+
+def tranzicija_iz_levela():
+    global screen, text_font, pozadina_slika, text_font2, odabrani_level
+    t1 = time.perf_counter()
+    pozadina_slika = pygame.image.load("users_bg.png")
+    pozadina = pygame.Surface((screen.get_width(), screen.get_height()))
+    pozadina.fill("Black")
+    pozadina.set_alpha(100)
+    screen.blit(pozadina, (0,0))
+    screen.blit(pygame.transform.scale(pozadina_slika, (screen.get_width()*0.5, screen.get_height()*0.5)), (screen.get_width()/2-screen.get_width()*0.25, screen.get_height()/2-screen.get_height()*0.25))
+    draw_text("Uspješno prođen level",text_font,"white",screen.get_width()*0.38,screen.get_height()*0.4)
+    draw_text(f"{odabrani_level}",text_font2,"gold",screen.get_width()*0.42,screen.get_height()*0.55)
+    run = True
+    while run == True:
+        t2 = time.perf_counter()
+        if t2-t1 > 3:
+            run = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                spremi_igru()
+                pygame.quit()
+                sys.exit()
+
+        pygame.display.update()
+
 def igra():
     global run, tp, screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, pozadina, skin_brojac, skinovi, level_state,uništeniProtivnici, postignuce,impossible_state,bozic_state
+    tranzicija_u_level() #timer za početak runde
     #slike
     zmaj_slika_og = skinovi[skin_brojac] #slika zmaja po skinu
     protivnik_og = pygame.image.load("birds.png")
@@ -1094,7 +1150,6 @@ def igra():
         stvoriVjetar()
     if vanzemaljac_state == True:
         stvoriVanzemaljca()
-
 
     run = True
     while run:
@@ -1590,14 +1645,19 @@ def igra():
                     level_state = "Level 5-2"
                 elif level_state == "Level 5-2":
                     run = False
+                    tranzicija_iz_levela()
                     main_menu()
             run = False
+            tranzicija_iz_levela()
             level_menu()
         if život < 0: #pokrece game_over funkciju ako ostaneš bez života
             run = False
             game_over()
         
         pygame.display.update()
+    
+    
+    
 
 if __name__ == "__main__":
     main()
