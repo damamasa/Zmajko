@@ -200,6 +200,8 @@ def player_name():
     screen.blit(pozadina, (0,0))
     screen.blit(pygame.transform.scale(pozadina_slika, (screen.get_width()*0.7, screen.get_height()*0.7)), (screen.get_width()/2-screen.get_width()*0.35, screen.get_height()/2-screen.get_height()*0.35))
     run = True
+    validno_ime = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',"0","1","2","3","4","5","6","7","8","9"]
     while run == True:
         screen.blit(pozadina_slika,(0,0)) 
         pygame.draw.rect(screen,"black", text_box1, 3)
@@ -244,7 +246,7 @@ def player_name():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_BACKSPACE:
                     ime = ime[:-1]
-                else:
+                elif event.unicode in validno_ime:
                     ime += event.unicode
         pygame.display.update()
 
@@ -258,7 +260,7 @@ def postignuca():
         screen.blit(bg, (screen.get_width()*0.05, screen.get_height()*0.05))
         for i in range(len(postignuce)):
             if postignuce[i] == "da":
-                draw_text(tekst[i][0],text_font3,"green",screen.get_width()/10,screen.get_height()*0.01+(i*screen.get_height()/7.5))
+                draw_text(tekst[i][0],text_font3,"green",screen.get_width()/10,screen.get_height()*0.1+(i*screen.get_height()/7.5))
                 draw_text(tekst[i][1],text_font4,"light grey",screen.get_width()/10,screen.get_height()*0.16+(i*screen.get_height()/7.5))
             else:
                 draw_text(tekst[i][0],text_font3,"#FF3030",screen.get_width()/10,screen.get_height()*0.1+(i*screen.get_height()/7.5))
@@ -644,7 +646,7 @@ def impossibleLevel():
 
 def bozicLevel():
     global brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojAviona, brojMeteora, brojVjetra, vanzemaljac_state, brojVanzemaljca, pozadina, impossible_state
-    pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
+    pozadina = pygame.transform.scale(pygame.image.load("bozic.jpg"),(screen.get_width(),screen.get_height()))
     brojPtica = 15
     brzinaStvaranja = 1.5
     final_vrijeme = 20
@@ -725,18 +727,24 @@ def level_menu():
                     run = False
                     main_menu()
                 if LEVEL1_GUMB.checkForCollision(MENU_MOUSE_POS):
-                    if LEVEL1_GUMB.text_input[0] <= level_state[-3]:
-                        if LEVEL1_GUMB.text_input[-1] <= level_state[-1]:
+                    if LEVEL1_GUMB.text_input[0] < level_state[-3]:
+                        odabrani_level = "Level "+LEVEL1_GUMB.text_input
+                        replay_state = True
+                    elif LEVEL1_GUMB.text_input[0] == level_state[-3]:
+                        if LEVEL1_GUMB.text_input[-1] < level_state[-1]:
                             odabrani_level = "Level "+LEVEL1_GUMB.text_input
                             replay_state = True
+                        elif LEVEL1_GUMB.text_input[-1] == level_state[-1]:
+                            odabrani_level = "Level "+LEVEL1_GUMB.text_input
+                            replay_state = False
                         else:
                             draw_text(f"Otključaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
                             pygame.display.update()
-                            time.sleep(2) 
+                            time.sleep(1.5)
                     else:
                         draw_text(f"Otključaj level prije.",text_font,(0,0,0),screen.get_width()/3,screen.get_height()/3)
                         pygame.display.update()
-                        time.sleep(2) 
+                        time.sleep(1.5)
                 if LEVEL2_GUMB.checkForCollision(MENU_MOUSE_POS):
                     if LEVEL2_GUMB.text_input[0] < level_state[-3]:
                         odabrani_level = "Level "+LEVEL2_GUMB.text_input
@@ -817,9 +825,9 @@ def tranzicija_iz_levela():
 def igra():
     global run, tp, screen, text_font, brojPtica, brzinaStvaranja, final_vrijeme, avioni_state, meteori_state, vjetar_state, brojMeteora, brojVjetra, pozadina, skin_brojac, skinovi, level_state,uništeniProtivnici, postignuce,impossible_state,bozic_state
     tranzicija_u_level() #timer za početak runde
+    
     #slike
     zmaj_slika_og = skinovi[skin_brojac] #slika zmaja po skinu
-    protivnik_og = pygame.image.load("birds.png")
     sidebar = pygame.transform.scale(pygame.image.load("sidebar.png"), (screen.get_width()*0.1651, screen.get_height()))
     sidebar1 = pygame.transform.scale(pygame.image.load("sidebar1.png"), (screen.get_width()*0.1651, screen.get_height()))
     sidebar2 = pygame.transform.scale(pygame.image.load("sidebar2.png"), (screen.get_width()*0.1651, screen.get_height()))
@@ -829,11 +837,6 @@ def igra():
     srce = pygame.transform.scale(pygame.image.load("srce.png"), (screen.get_width()*0.045, screen.get_height()*0.07))
     fireball_og = pygame.image.load("fireball.png")
     fireball_menu = pygame.transform.scale(fireball_og, (screen.get_width()*0.055, screen.get_height()*0.095))
-    avion_og = pygame.image.load("avion.png")
-    meteor_og = pygame.image.load("meteor.png")
-    vjetar_og = pygame.image.load("vjetar.png")
-    vanzemaljac_og = pygame.image.load("alien.png")
-    vanzemaljac_pucanj_og = pygame.image.load("purple.png")
     powerup2_og = pygame.image.load("blue.png")
     powerup2_menu = pygame.transform.scale(powerup2_og, (screen.get_width()*0.055, screen.get_height()*0.095))
     powerup3_og = pygame.image.load("powerup3.png")
@@ -842,6 +845,23 @@ def igra():
     nema_sign = pygame.transform.scale(pygame.image.load("nema.png"), (screen.get_width()*0.06, screen.get_height()*0.1))
     nema_sign.set_alpha(150)
 
+    if bozic_state == True:
+        avion_og = pygame.image.load("mraz.png")
+        meteor_og = pygame.image.load("snowball.png")
+        vjetar_og = pygame.image.load("vjetar.png")
+        vanzemaljac_og = pygame.image.load("snjeza.png")
+        vanzemaljac_pucanj_og = pygame.image.load("lizalica.png")
+        protivnik_og = pygame.image.load("kapica.png")
+    else:
+        protivnik_og = pygame.image.load("birds.png")
+        avion_og = pygame.image.load("avion.png")
+        meteor_og = pygame.image.load("meteor.png")
+        vjetar_og = pygame.image.load("vjetar.png")
+        vanzemaljac_og = pygame.image.load("alien.png")
+        vanzemaljac_pucanj_og = pygame.image.load("purple.png")
+       
+
+    
     #aktivacija powerupova određeni po svijetu
     if level_state[-3] == "1": #koji svijet
         powerups = 0
@@ -1616,10 +1636,10 @@ def igra():
             if level_state == "Level 5-2":
                 postignuce[2] = "da"
             if impossible_state == True: #nemogući level
-                postignuce[3] = "da"
+                postignuce[4] = "da"
                 main_menu()
             if bozic_state == True:
-                postignuce[4] = "da"
+                postignuce[3] = "da"
                 main_menu()
             if postignuce[0] == "da" and postignuce[1] == "da" and postignuce[2] == "da" and postignuce[3] == "da" and postignuce[4] == "da":
                 postignuce[5] = "da"
@@ -1656,8 +1676,5 @@ def igra():
         
         pygame.display.update()
     
-    
-    
-
 if __name__ == "__main__":
     main()
