@@ -382,12 +382,12 @@ def main_menu():
                     postignuca()
                 if LEVEL_GUMB.checkForCollision(MENU_MOUSE_POS):
                     impossible_state = True
-                    odabrani_level = "NEĆEŠ PREŽIVJETI"
+                    odabrani_level = "Level 6-1"
                     replay_state = False
                     impossibleLevel()
                 if BOZIC_GUMB.checkForCollision(MENU_MOUSE_POS):
                     bozic_state = True
-                    odabrani_level = "Sretan Božić!"
+                    odabrani_level = "Level 6-2"
                     replay_state = False
                     bozicLevel()
                 if TUTORIAL_BUTTON.checkForCollision(MENU_MOUSE_POS):
