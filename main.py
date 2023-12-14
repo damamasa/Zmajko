@@ -520,7 +520,7 @@ def promijeni_level():
     if (level_state == "Level 1-1" and replay_state == False) or (odabrani_level == "Level 1-1" and replay_state == True): #leveli igrice
         pozadina = pygame.transform.scale(pygame.image.load("world1_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
-        brzinaStvaranja = 2.5
+        brzinaStvaranja = 2
         final_vrijeme = 20
         avioni_state=False
         meteori_state = False
@@ -529,7 +529,7 @@ def promijeni_level():
     elif (level_state == "Level 1-2" and replay_state == False) or (odabrani_level == "Level 1-2" and replay_state == True):
         pozadina = pygame.transform.scale(pygame.image.load("world1_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
-        brzinaStvaranja = 1.5
+        brzinaStvaranja = 1.3
         final_vrijeme = 20
         avioni_state=False
         meteori_state = False
@@ -538,8 +538,8 @@ def promijeni_level():
     elif (level_state == "Level 2-1" and replay_state == False) or (odabrani_level == "Level 2-1" and replay_state == True):   
         pozadina = pygame.transform.scale(pygame.image.load("world2_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
-        brzinaStvaranja = 2
-        final_vrijeme = 20
+        brzinaStvaranja = 1.8
+        final_vrijeme = 25
         avioni_state=True
         meteori_state = False
         vjetar_state = False
@@ -548,8 +548,8 @@ def promijeni_level():
     elif (level_state == "Level 2-2" and replay_state == False) or (odabrani_level == "Level 2-2" and replay_state == True):
         pozadina = pygame.transform.scale(pygame.image.load("world2_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
-        brzinaStvaranja = 1.5
-        final_vrijeme = 20
+        brzinaStvaranja = 1.3
+        final_vrijeme = 30
         avioni_state=True
         meteori_state = False
         vjetar_state = False
@@ -558,8 +558,8 @@ def promijeni_level():
     elif (level_state == "Level 3-1" and replay_state == False) or (odabrani_level == "Level 3-1" and replay_state == True):
         pozadina = pygame.transform.scale(pygame.image.load("world3_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 10
-        brzinaStvaranja = 2.5
-        final_vrijeme = 20
+        brzinaStvaranja = 2
+        final_vrijeme = 40
         avioni_state=True
         meteori_state = True
         vjetar_state = False
@@ -569,8 +569,8 @@ def promijeni_level():
     elif (level_state == "Level 3-2" and replay_state == False) or (odabrani_level == "Level 3-2" and replay_state == True):
         pozadina = pygame.transform.scale(pygame.image.load("world3_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 15
-        brzinaStvaranja = 2.5
-        final_vrijeme = 20
+        brzinaStvaranja = 2
+        final_vrijeme = 45
         avioni_state=True
         meteori_state = True
         vjetar_state = False
@@ -580,8 +580,8 @@ def promijeni_level():
     elif (level_state == "Level 4-1" and replay_state == False) or (odabrani_level == "Level 4-1" and replay_state == True):
         pozadina = pygame.transform.scale(pygame.image.load("world4_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 10
-        brzinaStvaranja = 2
-        final_vrijeme = 20
+        brzinaStvaranja = 2.2
+        final_vrijeme = 50
         avioni_state=True
         meteori_state = True
         vjetar_state = True
@@ -591,41 +591,41 @@ def promijeni_level():
         brojVjetra = 1
     elif (level_state == "Level 4-2" and replay_state == False) or (odabrani_level == "Level 4-2" and replay_state == True):
         pozadina = pygame.transform.scale(pygame.image.load("world4_bg.jpg"), (screen.get_width(), screen.get_height()))
-        brojPtica = 10
+        brojPtica = 15
         brzinaStvaranja = 2
-        final_vrijeme = 20
+        final_vrijeme = 55
         avioni_state=True
         meteori_state = True
         vjetar_state = True
         vanzemaljac_state = False
         brojAviona = 3
         brojMeteora = 5
-        brojVjetra = 2
+        brojVjetra = 3
     elif (level_state == "Level 5-1" and replay_state == False) or (odabrani_level == "Level 5-1" and replay_state == True):
         pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
-        brojPtica = 20
-        brzinaStvaranja = 1.5
-        final_vrijeme = 20
-        avioni_state=False
-        meteori_state = False
+        brojPtica = 15
+        brzinaStvaranja = 2
+        final_vrijeme = 60
+        avioni_state=True
+        meteori_state = True
         vjetar_state = True
         vanzemaljac_state = True
-        brojAviona = 5
-        brojMeteora = 5
-        brojVjetra = 1
+        brojAviona = 3
+        brojMeteora = 3
+        brojVjetra = 2
         brojVanzemaljca = 3
     elif (level_state == "Level 5-2" and replay_state == False) or (odabrani_level == "Level 5-2" and replay_state == True):
         pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
         brojPtica = 20
         brzinaStvaranja = 1.5
-        final_vrijeme = 20
+        final_vrijeme = 80
         avioni_state=True
         meteori_state = True
         vjetar_state = True
         vanzemaljac_state = True
-        brojAviona = 5
-        brojMeteora = 5
-        brojVjetra = 1
+        brojAviona = 2
+        brojMeteora = 2
+        brojVjetra = 2
         brojVanzemaljca = 5
 
 def impossibleLevel():
@@ -633,14 +633,14 @@ def impossibleLevel():
     pozadina = pygame.transform.scale(pygame.image.load("world5_bg.jpg"), (screen.get_width(), screen.get_height()))
     brojPtica = 20
     brzinaStvaranja = 1.5
-    final_vrijeme = 20
+    final_vrijeme = 90
     avioni_state=True
     meteori_state = True
     vjetar_state = True
     vanzemaljac_state = True
     brojAviona = 5
     brojMeteora = 5
-    brojVjetra = 1
+    brojVjetra = 5
     brojVanzemaljca = 5
     igra()
 
